@@ -23,8 +23,8 @@
 #define trip_ones_driver                    0b10000110
 #define trip_100m_driver                    0b10000101
 
-void init_led(void);
+void init_leds(void);
 void refresh_sevenseg(void);
-void interrupt_led(void);
+void interrupt_leds(void);
 
 #endif leds_h

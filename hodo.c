@@ -52,6 +52,23 @@ bit flag_trip_half;
 bit flag_lpg_reed;                  // use for lpg reed signal.
 bit flag_lpg_mode;                  // use for unleaded or lpg mode.
 
+uns24 distance(void)
+{
+	return distance;
+}
+
+void clear_trip()
+{
+	trip = 0;
+	write_trip(0);
+	trip_pulses = 0;
+}
+
+unsigned int trip(void)
+{
+	return trip;
+}
+
 void init_hodo(void)
 {
     flag_distance_lo = 0; // init
@@ -143,34 +160,32 @@ void incr_distance(void)
 }
 
 // Write a distance to the EEPROM.
+void write_trip(unsigned int trip)
+{
+    unsigned char to_write = 0xFF;
+    LOBYTE(to_write, trip);
+	if (flag_lpg_mode)
+        eeprom_write(eeprom_lpg_lo, to_write);
+    else
+        eeprom_write(eeprom_trip_lo, to_write);
+
+    if (to_write == 0)
+    {
+        HIBYTE(to_write, trip);
+    	if (flag_lpg_mode)
+            eeprom_write(eeprom_lpg_hi, to_write);
+	    else
+            eeprom_write(eeprom_trip_hi, to_write);
+    }
+}
+
+// Write a distance to the EEPROM.
 void write_distance(void)
 {
     // stores distance when it is xxxx.5
     if ((trip_pulses == (pulses_in_100m / 2)) && !flag_trip_half)
     {
-        unsigned char to_write = 0xFF;
-        LOBYTE(to_write, trip);
-    	if (flag_lpg_mode)
-    	{
-            eeprom_write(eeprom_lpg_lo, to_write);
-        }
-	    else
-        {
-            eeprom_write(eeprom_trip_lo, to_write);
-        }
-
-        if (to_write == 0)
-        {
-            HIBYTE(to_write, trip);
-        	if (flag_lpg_mode)
-        	{
-                eeprom_write(eeprom_lpg_hi, to_write);
-            }
-    	    else
-    	    {
-                eeprom_write(eeprom_trip_hi, to_write);
-            }
-        }
+    	write_trip(trip + 1);
         // stored. don't store anymore
         flag_trip_half = 1;
     }
@@ -182,9 +197,18 @@ void write_distance(void)
     }
 
     // stores distance when it is xxxx.5
+    bit flag_incr = 0;
     if ((distance_pulses == 5) && !flag_distance_half)
     {
-        eeprom_write(eeprom_distance_lo, distance.low8 + 1);
+    	if (distance.low8 >= 100)
+    	{
+    		eeprom_write(eeprom_distance_lo, 0);
+    		// should increment middle also
+    		flag_distance_mi = 1;
+    		flag_incr = 1;
+    	}
+    	else
+            eeprom_write(eeprom_distance_lo, distance.low8 + 1);
         // stored. don't store anymore
         flag_distance_half = 1;
     }
@@ -196,12 +220,35 @@ void write_distance(void)
     }
     if (flag_distance_mi)
     {
-        eeprom_write(eeprom_distance_mid, distance.mid8);
+    	if (flag_incr)
+    	{
+    	    if (distance.mid8 >= 100)
+    	    {
+    		    eeprom_write(eeprom_distance_mid, 0);
+    		    // should increment high also
+    		    flag_distance_hi = 1;
+    	    }
+    	    else
+    	    {
+                eeprom_write(eeprom_distance_mid, distance.mid8 + 1);
+    		    flag_incr = 0;
+            }
+		}
+		else
+            eeprom_write(eeprom_distance_mid, distance.mid8);
         flag_distance_mi = 0;
     }
     if (flag_distance_hi)
     {
-        eeprom_write(eeprom_distance_hi, distance.high8);
+    	if (flag_incr)
+    	{
+    	    if (distance.mid8 >= 100)
+    		    eeprom_write(eeprom_distance_hi, 0);
+    	    else
+                eeprom_write(eeprom_distance_hi, distance.mid8 + 1);
+		}
+		else
+            eeprom_write(eeprom_distance_hi, distance.high8);
         flag_distance_hi = 0;
     }
 }

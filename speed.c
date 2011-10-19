@@ -46,6 +46,11 @@ unsigned char tmr1_upper;           // since 0.5 seconds isn't long enough, we i
                                     //   and use it for top byte of lastpulses.
 uns24 now;                          // last sampled tmr1/tmr1_upper "now" time.
 
+unsigned int speed(void)
+{
+	return speed;
+}
+
 unsigned char tmr1_upper(void)
 {
 	return tmr1_upper;

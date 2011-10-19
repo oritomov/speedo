@@ -19,5 +19,6 @@ void interrupt_speed(void);
 unsigned char tmr1_upper(void);
 unsigned int pulsecount(void);
 void pulsecount(unsigned int num);
+unsigned int speed(void);
 
 #endif speed_h

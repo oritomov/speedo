@@ -33,7 +33,7 @@ unsigned char sevenseg_driver[13] = { ones_driver, tens_driver, hundreds_driver,
                distance_1_driver, distance_2_driver, distance_3_driver,
                distance_4_driver, distance_5_driver, distance_6_driver };
 
-void init_led(void)
+void init_leds(void)
 {
     blink_enable = 0;
     dim_factor = 0xFF;
@@ -77,7 +77,7 @@ void refresh_sevenseg(void)
 }
 
 // LED interrupt
-void interrupt_led(void)
+void interrupt_leds(void)
 {
     // tmr2 overflow, refresh next LED cluster
     if (tmr2if)

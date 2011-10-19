@@ -21,14 +21,15 @@ This program should compile under SourceBoost.  Feel free to modify it
 to compile with any program you wish, for any platform you wish.
 */
 
-//#include "speed.h"
-//#include "hodo.h"
 #include "common.h"
+#include "speed.h"
+#include "hodo.h"
 #include "display.h"
 #include "leds.h"
 #include "button.h"
 
 #pragma DATA _CONFIG, _LVP_OFF & _BOREN_ON & _MCLRE_OFF & _PWRTE_ON & _WDT_OFF & _INTOSC_OSC_NOCLKOUT
+
 #define MENU_TIMEOUT            12
 
 typedef enum
@@ -72,9 +73,10 @@ void main(void)
     porta = 0b00000000;     
     portb = 0b00000000;
 
-	init_led();
-    //init_speed();
-    //init_hodo();
+    init_button();
+	init_leds();
+	
+	check_display();
 
     pir1 = 0b00000000;  // clear the rest of the interrupt flags
     pie1 = 0b00000011;  // enable interrupts: tmr1, tmr2
@@ -88,8 +90,6 @@ void main(void)
         unsigned char gen_timer;    // a general variable we can set to tmr1_upper + whatever, and break when they match. Simple software timer.
 
     	reset_button();
-        //calculate_speed(0);
-        //write_distance();
         switch (current_mode)
         {
             case MODE_MENU_TEST:    // show menu
@@ -161,7 +161,6 @@ void main(void)
 // handles ALL interrupts
 void interrupt(void)
 {
-    interrupt_led();
-    //interrupt_speed();
+    interrupt_leds();
     interrupt_button();
 }
