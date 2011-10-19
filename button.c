@@ -79,9 +79,7 @@ void interrupt_button(void)
             button_heldcount = 0;
         }
 
-#ifdef _LPG
         interrupt_lpg();
-#endif //_LPG
 
         t0if = 0;
     }

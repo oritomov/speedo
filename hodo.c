@@ -21,8 +21,6 @@ This program should compile under SourceBoost.  Feel free to modify it
 to compile with any program you wish, for any platform you wish.
 */
 
-#define _LPG
-
 #include "hodo.h"
 
 // eeprom
@@ -35,10 +33,8 @@ to compile with any program you wish, for any platform you wish.
 
 #define eeprom_trip_lo              7
 #define eeprom_trip_hi              8
-#ifdef _LPG
 #define eeprom_lpg_lo               9
 #define eeprom_lpg_hi              10
-#endif //_LPG
 
 // ram
 unsigned int pulses_in_100m;
@@ -53,10 +49,8 @@ bit flag_distance_hi;
 bit flag_distance_half;
 bit flag_trip;
 bit flag_trip_half;
-#ifdef _LPG
 bit flag_lpg_reed;                  // use for lpg reed signal.
 bit flag_lpg_mode;                  // use for unleaded or lpg mode.
-#endif //_LPG
 
 void init_hodo(void)
 {
@@ -66,10 +60,8 @@ void init_hodo(void)
     flag_distance_half = 0;
     flag_trip = 0;
     flag_trip_half = 0;
-#ifdef _LPG
     flag_lpg_reed = 0;
     flag_lpg_mode = 0;
-#endif //_LPG
 
     // pulses_in_100m
     {
@@ -93,7 +85,6 @@ void init_hodo(void)
 // increments distance on every ten 100m
 void read_trip(void)
 {
-#ifdef _LPG
 	if (flag_lpg_mode)
 	{
         unsigned char temp1, temp2;
@@ -102,7 +93,6 @@ void read_trip(void)
         MAKESHORT(trip, temp1, temp2);
 	}
 	else
-#endif //_LPG
 	{
         unsigned char temp1, temp2;
         temp1 = eeprom_read(eeprom_trip_lo);
@@ -160,13 +150,11 @@ void write_distance(void)
     {
         unsigned char to_write = 0xFF;
         LOBYTE(to_write, trip);
-#ifdef _LPG
     	if (flag_lpg_mode)
     	{
             eeprom_write(eeprom_lpg_lo, to_write);
         }
 	    else
-#endif //_LPG
         {
             eeprom_write(eeprom_trip_lo, to_write);
         }
@@ -174,13 +162,11 @@ void write_distance(void)
         if (to_write == 0)
         {
             HIBYTE(to_write, trip);
-#ifdef _LPG
         	if (flag_lpg_mode)
         	{
                 eeprom_write(eeprom_lpg_hi, to_write);
             }
     	    else
-#endif //_LPG
     	    {
                 eeprom_write(eeprom_trip_hi, to_write);
             }
@@ -220,7 +206,6 @@ void write_distance(void)
     }
 }
 
-#ifdef _LPG
 void interrupt_lpg(void)
 {
     if (!LPG_INPUT)  // if LPG is on, LPG_INPUT is held low.
@@ -232,4 +217,3 @@ void interrupt_lpg(void)
         flag_lpg_reed = 0;
     }
 }
-#endif //_LPG
