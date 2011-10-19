@@ -1,3 +1,6 @@
+#ifndef button_h
+#define button_h
+
 #include "hodo.h"
 
 #define BUTTON_INPUT                        porta.5
@@ -10,3 +13,5 @@ unsigned char button_heldcount(void);
 bit is_buttonpressed(void);
 bit is_buttonheld(void);
 void interrupt_button(void);
+
+#endif button_h

@@ -1,3 +1,6 @@
+#ifndef leds_h
+#define leds_h
+
 #include "display.h"
 
 #define tmr2if          pir1.TMR2IF
@@ -23,3 +26,5 @@
 void init_led(void);
 void refresh_sevenseg(void);
 void interrupt_led(void);
+
+#endif leds_h

@@ -1,3 +1,6 @@
+#ifndef speed_h
+#define speed_h
+
 #include "hodo.h"
 
 #define SPEEDO_INPUT                        portb.3
@@ -16,3 +19,5 @@ void interrupt_speed(void);
 unsigned char tmr1_upper(void);
 unsigned int pulsecount(void);
 void pulsecount(unsigned int num);
+
+#endif speed_h

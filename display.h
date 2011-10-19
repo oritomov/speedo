@@ -1,3 +1,6 @@
+#ifndef display_h
+#define display_h
+
 #include "speed.h"
 
 // This macro translates the order of the 7-segment bits to whatever the hardware pins are actually assigned to.
@@ -13,3 +16,5 @@ void display_trip(unsigned int trip);
 void display_distance(uns24 num);
 unsigned char sevenseg_bits(unsigned char current_digit);
 void sevenseg_bits(unsigned char current_digit, unsigned char bits);
+
+#endif display_h

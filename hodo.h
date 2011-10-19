@@ -1,10 +1,14 @@
+#ifndef hodo_h
+#define hodo_h
+
 #include "common.h"
 
-#ifdef _LPG
 #define LPG_INPUT                           porta.4
-#endif //_LPG
 
 void init_hodo(void);
 void read_trip(void);
 void incr_distance(void);
 void write_distance(void);
+void interrupt_lpg(void);
+
+#endif hodo_h
