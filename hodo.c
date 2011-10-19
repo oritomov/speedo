@@ -23,7 +23,6 @@ to compile with any program you wish, for any platform you wish.
 
 #define _LPG
 
-#include "common.h"
 #include "hodo.h"
 
 // eeprom

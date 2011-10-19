@@ -1,10 +1,13 @@
 #include <system.h>
 
+#ifndef _uns24
+#define _uns24
 typedef struct _uns24 {
     unsigned char low8;
     unsigned char mid8;
     unsigned char high8;
 } uns24;
+#endif
 
 #define gie             intcon.GIE
 

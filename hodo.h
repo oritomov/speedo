@@ -1,4 +1,4 @@
-#include <system.h>
+#include "common.h"
 
 #ifdef _LPG
 #define LPG_INPUT                           porta.4

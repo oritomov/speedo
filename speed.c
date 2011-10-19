@@ -46,6 +46,21 @@ unsigned char tmr1_upper;           // since 0.5 seconds isn't long enough, we i
                                     //   and use it for top byte of lastpulses.
 uns24 now;                          // last sampled tmr1/tmr1_upper "now" time.
 
+unsigned char tmr1_upper(void)
+{
+	return tmr1_upper;
+}
+
+unsigned int pulsecount(void)
+{
+    return pulsecount;
+}
+
+void pulsecount(unsigned int num)
+{
+    pulsecount = num;
+}
+
 void init_speed(void)
 {
     // calib_factor
@@ -223,21 +238,8 @@ void interrupt_speed(void)
 
             if ((make16i(now) - make16i(lastpulses[0])) > SPEEDO_BOUNCE_THRESHOLD) // 2ms => 250 ticks => 62.5 bigticks
             {
-                /*
-                distance_pulses++;
-                if (distance_pulses >= pulses_in_100m)
-                {
-                    distance_pulses = 0;
-                    distance++;
-                    if (distance > 9999)
-                    {
-                        distance = 0;
-                    }
-                    flag_distance = 1; // write to eprom
+                incr_distance();
 
-                    incr_distance();
-                }
-                */
                 pulsecount++;
                 lastpulses[1] = lastpulses[0];
                 lastpulse_stale1 = lastpulse_stale0;

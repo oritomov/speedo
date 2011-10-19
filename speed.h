@@ -1,4 +1,4 @@
-#include "common.h"
+#include "hodo.h"
 
 #define SPEEDO_INPUT                        portb.3
 
@@ -13,3 +13,6 @@
 void init_speed(void);
 void calculate_speed(bit forceupdate);
 void interrupt_speed(void);
+unsigned char tmr1_upper(void);
+unsigned int pulsecount(void);
+void pulsecount(unsigned int num);
