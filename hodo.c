@@ -52,6 +52,21 @@ bit flag_trip_half;
 bit flag_lpg_reed;                  // use for lpg reed signal.
 bit flag_lpg_mode;                  // use for unleaded or lpg mode.
 
+bit flag_lpg_reed(void)
+{
+	return flag_lpg_reed;
+}
+
+bit flag_lpg_mode(void)
+{
+	return flag_lpg_mode;
+}
+
+void flag_lpg_mode(bit value)
+{
+	flag_lpg_mode = value;
+}
+
 uns24 distance(void)
 {
 	return distance;

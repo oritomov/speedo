@@ -13,6 +13,9 @@ void write_trip(unsigned int trip);
 void interrupt_lpg(void);
 uns24 distance(void);
 unsigned int trip(void);
-void clear_trip();
+void clear_trip(void);
+bit flag_lpg_reed(void);
+bit flag_lpg_mode(void);
+void flag_lpg_mode(bit value);
 
 #endif hodo_h

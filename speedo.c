@@ -135,9 +135,30 @@ void main(void)
                     display_speed(speed());
                     display_trip(trip());
                     display_distance(distance());
+                    if (flag_lpg_reed() != flag_lpg_mode())
+                    {
+                    	if (flag_lpg_reed())
+                    		current_mode = MSG_LPG;
+						else
+							current_mode = MSG_UNL;
+						flag_lpg_mode(flag_lpg_reed());
+						break;
+                    }
                 }
                 // switch to first menu state
                 current_mode = MODE_MENU_CLR;
+                break;
+            case MSG_UNL:     // show mode
+            case MSG_LPG:
+                sevenseg_text(current_mode);
+                gen_timer = tmr1_upper + MENU_TIMEOUT;
+                while (tmr1_upper != gen_timer)
+                {
+                    calculate_speed(0);
+                    write_distance();
+                    display_distance(distance());
+				}
+                current_mode = MODE_SPD;
                 break;
             case MODE_CLR:          // clear trip
                 clear_trip();
