@@ -28,6 +28,8 @@ to compile with any program you wish, for any platform you wish.
 #include "leds.h"
 #include "button.h"
 
+#pragma DATA _CONFIG, _LVP_OFF & _BOREN_ON & _MCLRE_OFF & _PWRTE_ON & _WDT_OFF & _INTOSC_OSC_NOCLKOUT
+
 #define MENU_TIMEOUT            12
 
 typedef enum
@@ -99,8 +101,8 @@ void main(void)
         {
             case MODE_MENU_TEST:    // show menu
                 sevenseg_text(current_mode);
-                gen_timer = tmr1_upper + MENU_TIMEOUT;
-                while (tmr1_upper != gen_timer)
+                gen_timer = tmr1_upper() + MENU_TIMEOUT;
+                while (tmr1_upper() != gen_timer)
                 {
                     if (is_buttonpressed() || is_buttonheld())
                     {
@@ -108,7 +110,7 @@ void main(void)
                         break;
                     }
                 }
-                if (tmr1_upper == gen_timer)
+                if (tmr1_upper() == gen_timer)
                     current_mode = MODE_MENU_TEST;
                 break;
             case MODE_TEST:         // display test mode
@@ -127,9 +129,9 @@ void main(void)
                 break;
             case MODE_TEST2:            // button input test mode for 15 seconds, button doesn't change modes
                 // TEST2: Check our button
-                gen_timer = tmr1_upper + 30;
+                gen_timer = tmr1_upper() + 30;
                 display_speed(0);
-                while (gen_timer != tmr1_upper)
+                while (gen_timer != tmr1_upper())
                 {
                     if (button_heldcount() > 0)
                         display_speed(button_heldcount());

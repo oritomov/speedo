@@ -3,8 +3,6 @@
 
 #include <system.h>
 
-#pragma DATA _CONFIG, _LVP_OFF & _BOREN_ON & _MCLRE_OFF & _PWRTE_ON & _WDT_OFF & _INTOSC_OSC_NOCLKOUT
-
 typedef struct _uns24 {
     unsigned char low8;
     unsigned char mid8;
