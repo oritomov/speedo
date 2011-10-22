@@ -28,8 +28,6 @@ to compile with any program you wish, for any platform you wish.
 #include "leds.h"
 #include "button.h"
 
-#pragma DATA _CONFIG, _LVP_OFF & _BOREN_ON & _MCLRE_OFF & _PWRTE_ON & _WDT_OFF & _INTOSC_OSC_NOCLKOUT
-
 #define MENU_TIMEOUT            12
 
 typedef enum
@@ -73,17 +71,24 @@ void main(void)
     porta = 0b00000000;     
     portb = 0b00000000;
 
+    clear_wdt();    // do this to avoid a reset
+    option_reg = 0b11010110;    // tmr0 triggers off internal clock, tmr0 prescaler to 1:128
+    tmr0 = 0x00;            // in case we want to use it later, it's reset.
+
+    init_speed();
+    init_hodo();
     init_button();
 	init_leds();
-	
-	check_display();
+
+    current_mode = MODE_MENU_TEST;    // PIC testing
 
     pir1 = 0b00000000;  // clear the rest of the interrupt flags
     pie1 = 0b00000011;  // enable interrupts: tmr1, tmr2
     intcon = 0b01100000;    // enable interrupts: tmr0 and PEIE
     clear_wdt();
-
-    current_mode = MODE_MENU_TEST;    // PIC testing
+	
+    gie = 1;                // enable global interrupts, now the display can start updating
+	check_display();
 
     while (1)
     {
@@ -162,5 +167,6 @@ void main(void)
 void interrupt(void)
 {
     interrupt_leds();
+	interrupt_speed();
     interrupt_button();
 }

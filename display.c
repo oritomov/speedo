@@ -39,10 +39,7 @@ void sevenseg_bits(unsigned char current_digit, unsigned char bits)
 //set all LEDs on and off
 void check_display(void)
 {
-    gie = 1;                // enable global interrupts, now the display can start updating
-
     // set all LEDs on (lamp test mode) for about 1 second
-
     while (tmr1_upper() < 2)
     {
         sevenseg_bits[12] = sevenseg_bits[11] = sevenseg_bits[10] = 

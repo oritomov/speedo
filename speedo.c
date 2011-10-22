@@ -112,6 +112,7 @@ void main(void)
     intcon = 0b01100000;    // enable interrupts: tmr0 and PEIE
     clear_wdt();
 
+    gie = 1;                // enable global interrupts, now the display can start updating
 	check_display();
 
     // by now we should have collected enough pulses (or not collected any) to get an idea of how fast we're going
