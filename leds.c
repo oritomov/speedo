@@ -58,8 +58,8 @@ void refresh_sevenseg(void)
     if (((!blink_enable) || (current_digit >= 3)) || (tmr1h & 0x80))
     {
         // assign proper bits to the ports
-        portb |= (SEVSEG_PORTB_MASK & sevenseg_bits(current_digit));
-        if (sevenseg_bits(current_digit) & SEVSEG_DECIMAL_MASK)
+        portb |= (SEVSEG_PORTB_MASK & sevenseg_bits_i(current_digit));
+        if (sevenseg_bits_i(current_digit) & SEVSEG_DECIMAL_MASK)
             SEVSEG_DECIMAL_BIT = 1; // don't forget decimal
         // turn on the current digit driver transistor
         porta |= (SEVSEG_PORTA_MASK & sevenseg_driver[current_digit]);

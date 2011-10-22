@@ -14,6 +14,7 @@ unsigned char sevenseg_lookup(unsigned char digit);
 void display_speed(unsigned int speed);
 void display_trip(unsigned int trip);
 void display_distance(uns24 num);
+unsigned char sevenseg_bits_i(unsigned char current_digit);
 unsigned char sevenseg_bits(unsigned char current_digit);
 void sevenseg_bits(unsigned char current_digit, unsigned char bits);
 

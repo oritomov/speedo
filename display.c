@@ -26,6 +26,11 @@ to compile with any program you wish, for any platform you wish.
 // ram 
 unsigned char sevenseg_bits[13];    // a buffer telling which LEDs we light up on each digit
 
+unsigned char sevenseg_bits_i(unsigned char current_digit)
+{
+	return sevenseg_bits[current_digit];
+}
+
 unsigned char sevenseg_bits(unsigned char current_digit)
 {
 	return sevenseg_bits[current_digit];
