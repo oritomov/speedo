@@ -9,6 +9,20 @@
 #define SEVSEG_BITFIELD(H,G,F,E,D,C,B,A)    0b ## C ## E ## D ## F ## H ## A ## B ## G
 #define SEVSEG_DECIMAL_MASK                 SEVSEG_BITFIELD(1,0,0,0,0,0,0,0)
 
+#define _A SEVSEG_BITFIELD(0,1,1,1,0,1,1,1)
+#define _C SEVSEG_BITFIELD(0,0,1,1,1,0,0,1)
+#define _d SEVSEG_BITFIELD(0,1,0,1,1,1,1,0)
+#define _E SEVSEG_BITFIELD(0,1,1,1,1,0,0,1)
+#define _G SEVSEG_BITFIELD(0,0,1,1,1,1,0,1)
+#define _L SEVSEG_BITFIELD(0,0,1,1,1,0,0,0)
+#define _n SEVSEG_BITFIELD(0,1,0,1,0,1,0,0)
+#define _o SEVSEG_BITFIELD(0,1,0,1,1,1,0,0)
+#define _P SEVSEG_BITFIELD(0,1,1,1,0,0,1,1)
+#define _r SEVSEG_BITFIELD(0,1,0,1,0,0,0,0)
+#define _S SEVSEG_BITFIELD(0,1,1,0,1,1,0,1)
+#define _t SEVSEG_BITFIELD(0,1,1,1,1,0,0,0)
+#define _u SEVSEG_BITFIELD(0,0,0,1,1,1,0,0)
+
 void check_display(void);
 unsigned char sevenseg_lookup(unsigned char digit);
 void display_speed(unsigned int speed);

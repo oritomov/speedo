@@ -64,12 +64,12 @@ void sevenseg_text(unsigned char message)
     switch (message)
     {
         case MODE_MENU_CLR:     // calibration (CLr)
-            sevenseg_bits(2, SEVSEG_BITFIELD(0,0,1,1,1,0,0,1));
-            sevenseg_bits(1, SEVSEG_BITFIELD(0,0,1,1,1,0,0,0));
-            sevenseg_bits(0, SEVSEG_BITFIELD(0,1,0,1,0,0,0,0));
+            sevenseg_bits(2, SEVSEG_BITFIELD(0,0,1,1,1,0,0,1)); // C
+            sevenseg_bits(1, SEVSEG_BITFIELD(0,0,1,1,1,0,0,0)); // L
+            sevenseg_bits(0, SEVSEG_BITFIELD(0,1,0,1,0,0,0,0)); // r
             break;
         case MSG_EEE:           // error (EEE)
-            sevenseg_bits(2, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1));
+            sevenseg_bits(2, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1)); // E
             sevenseg_bits(1, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1));
             sevenseg_bits(0, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1));
             break;
@@ -91,7 +91,7 @@ void main(void)
 {
     // initialization of ports, timers, interrupts, variables, etc
     cmcon = 0b00000111;
-    trisa = 0b00100000;     // 1 means high impedance (input)
+    trisa = 0b00110000;     // 1 means high impedance (input)
     trisb = 0b00001000;
     porta = 0b00010000;     // 0 is low (gnd), 1 is high (5V)
     portb = 0b00000000;
@@ -139,21 +139,21 @@ void main(void)
                     if (flag_lpg_reed() != flag_lpg_mode())
                     {
                     	if (flag_lpg_reed())
-                    		current_mode = MSG_LPG;
+                    		current_mode = MSG_LPG - 1;
 						else
-							current_mode = MSG_UNL;
+							current_mode = MSG_UNL - 1;
 						flag_lpg_mode(flag_lpg_reed());
 						break;
                     }
                 }
                 // switch to first menu state
-                current_mode = MODE_MENU_CLR;
+                current_mode++;
                 break;
             case MSG_UNL:     // show mode
             case MSG_LPG:
                 sevenseg_text(current_mode);
-                gen_timer = tmr1_upper + MENU_TIMEOUT;
-                while (tmr1_upper != gen_timer)
+                gen_timer = tmr1_upper() + MENU_TIMEOUT;
+                while (tmr1_upper() != gen_timer)
                 {
                     calculate_speed(0);
                     write_distance();
@@ -168,8 +168,8 @@ void main(void)
                 break;
             case MODE_MENU_CLR:     // show menu
                 sevenseg_text(current_mode);
-                gen_timer = tmr1_upper + MENU_TIMEOUT;
-                while (tmr1_upper != gen_timer)
+                gen_timer = tmr1_upper() + MENU_TIMEOUT;
+                while (tmr1_upper() != gen_timer)
                 {
                     if (is_buttonpressed())
                     {
@@ -184,7 +184,7 @@ void main(void)
                 }
                 if (current_mode == MODE_MENU_CLR + 1)
                     current_mode = MODE_SPD;      // let's wrap around.
-                if (tmr1_upper == gen_timer)
+                if (tmr1_upper() == gen_timer)
                     current_mode = MODE_SPD;
                 break;
             default:

@@ -34,7 +34,8 @@ to compile with any program you wish, for any platform you wish.
 
 typedef enum
 { 
-	MODE_MENU_TEST, MODE_TEST, MODE_TEST2, MODE_TEST3
+	MODE_MENU_TEST, MODE_TEST, MODE_TEST2, MODE_TEST3,
+    MSG_UNL, MSG_LPG
 } mainmode;
 
 // ram
@@ -49,14 +50,24 @@ void sevenseg_text(unsigned char message)
     switch (message)
     {
         case MODE_MENU_TEST:    // test mode (tSt)
-            sevenseg_bits(2, SEVSEG_BITFIELD(0,1,1,1,1,0,0,0));
-            sevenseg_bits(1, SEVSEG_BITFIELD(0,1,1,0,1,1,0,1));
-            sevenseg_bits(0, SEVSEG_BITFIELD(0,1,1,1,1,0,0,0));
+            sevenseg_bits(2, _t);
+            sevenseg_bits(1, _S);
+            sevenseg_bits(0, _t);
+            break;
+        case MSG_UNL:           // test mode (unL)
+            sevenseg_bits(2, _u);
+            sevenseg_bits(1, _n);
+            sevenseg_bits(0, _L);
+            break;
+        case MSG_LPG:           // test mode (LPG)
+            sevenseg_bits(2, _L);
+            sevenseg_bits(1, _P);
+            sevenseg_bits(0, _G);
             break;
         default:                // error (EEE)
-            sevenseg_bits(2, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1));
-            sevenseg_bits(1, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1));
-            sevenseg_bits(0, SEVSEG_BITFIELD(0,1,1,1,1,0,0,1));
+            sevenseg_bits(2, _E);
+            sevenseg_bits(1, _E);
+            sevenseg_bits(0, _E);
             break;
     }
     gie = 1;
@@ -99,20 +110,46 @@ void main(void)
     	reset_button();
         switch (current_mode)
         {
-            case MODE_MENU_TEST:    // show menu
+            case MSG_UNL:     // show mode
+            case MSG_LPG:
                 sevenseg_text(current_mode);
                 gen_timer = tmr1_upper() + MENU_TIMEOUT;
                 while (tmr1_upper() != gen_timer)
+					;
+                current_mode = MODE_MENU_TEST;
+                break;
+            case MODE_MENU_TEST:    // show menu
+                sevenseg_text(current_mode);
+            
+                while (!is_buttonpressed() && !is_buttonheld())
                 {
-                    if (is_buttonpressed() || is_buttonheld())
+                    if (flag_lpg_reed() != flag_lpg_mode())
                     {
-                        current_mode++;
-                        break;
+                    	if (flag_lpg_reed())
+                    		current_mode = MSG_LPG - 1;
+						else
+							current_mode = MSG_UNL - 1;
+						flag_lpg_mode(flag_lpg_reed());
+						break;
                     }
                 }
-                if (tmr1_upper() == gen_timer)
-                    current_mode = MODE_MENU_TEST;
+                // switch to first menu state
+                current_mode++;
                 break;
+            
+//                sevenseg_text(current_mode);
+//                gen_timer = tmr1_upper() + MENU_TIMEOUT;
+//                while (tmr1_upper() != gen_timer)
+//                {
+//                    if (is_buttonpressed() || is_buttonheld())
+//                    {
+//                        current_mode++;
+//                        break;
+//                    }
+//                }
+//                if (tmr1_upper() == gen_timer)
+//                    current_mode = MODE_MENU_TEST;
+//                break;
             case MODE_TEST:         // display test mode
                 // TEST: running numbers. display tmr1_upper on the LED until button is pressed
                 while (!(is_buttonpressed() || is_buttonheld()))
