@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define LPG_INPUT                           porta.4
+#define LPG_INPUT							porta.4
 
 void init_hodo(void);
 void read_trip(void);
@@ -11,11 +11,11 @@ void incr_distance(void);
 void write_distance(void);
 void write_trip(unsigned int trip);
 void interrupt_lpg(void);
-uns24 distance(void);
-unsigned int trip(void);
-void clear_trip(void);
-bit flag_lpg_reed(void);
-bit flag_lpg_mode(void);
-void flag_lpg_mode(bit value);
+
+extern uns24 distance;
+extern unsigned int trip;
+extern unsigned int trip_pulses;
+extern bit flag_lpg_reed;
+extern bit flag_lpg_mode;
 
 #endif hodo_h
