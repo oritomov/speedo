@@ -29,6 +29,13 @@ bit flag_buttonheld;				// ... or a button was held.  Clear manually before and 
 unsigned char button_heldcount;		// how many tmr0 ticks the button has been held
 
 void init_button(void) {
+	// setup Timer0
+	option_reg = 0b11010110;	// tmr0 triggers off internal clock, tmr0 prescaler to 1:128
+				// --0----- 	timet mode ( T0SC = 0 )
+				// ----0--- 	prescaler assigned to Timer0 ( PSA = 0 )
+				// -----110		prescale = 128 ( PS = 110 ) -> increment every 128 us
+	tmr0 = 0x00;			// in case we want to use it later, it's reset.
+
 	button_heldcount = 0;
 }
 

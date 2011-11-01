@@ -97,13 +97,11 @@ void main(void)
 	portb = 0b00000000;
 
 	clear_wdt();	// do this to avoid a reset
-	option_reg = 0b11010110;	// tmr0 triggers off internal clock, tmr0 prescaler to 1:128
-	tmr0 = 0x00;			// in case we want to use it later, it's reset.
 
-	init_speed();
+	init_speed();	// tmr1 & ccp
 	init_hodo();
-	init_button();
-	init_leds();
+	init_button();	// tmr0
+	init_leds();	// tmr2
 
 	current_mode = MODE_DEFAULT;	// can set MODE_DEFAULT to MODE_TEST for PIC testing
 
@@ -205,7 +203,7 @@ void main(void)
 
 void interrupt(void)
 {
-	interrupt_leds();
-	interrupt_speed();
-	interrupt_button();
+	interrupt_leds();	// tmr2 -> every 1 ms
+	interrupt_speed();	// tmr1 & ccp
+	interrupt_button();	// tmr0 -> every 32.768 ms
 }

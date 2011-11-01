@@ -79,7 +79,7 @@ void refresh_sevenseg(void)
 // LED interrupt
 void interrupt_leds(void)
 {
-	// tmr2 overflow, refresh next LED cluster
+	// tmr2 overflow, refresh next LED cluster - every 1 ms
 	if (tmr2if)
 	{
 		refresh_sevenseg();

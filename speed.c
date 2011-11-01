@@ -69,6 +69,11 @@ void init_speed(void)
 	ccpr1l = 0x00;			// and CCP cap timer
 	ccpr1h = 0x00;
 	t1con = 0b00110001;		// ===Start tmr1=== with 1:8 prescale; 125000 increments per second
+			//-0------		gate disabled ( TMR1GE = 0 )
+			//--11----		prescale = 8 ( T1CKPS = 11 )
+			//----0---		LP oscillator disabled ( T1OSCEN = 0 )
+			//------0-		internal clock ( TMR1CS = 0 )
+			//-------1		enable Timer1 ( TMR1ON = 1 )
 	ccp1con = 0b00000100;	// CCP capture mode ON, every falling edge of RB3 we capture the contents of tmr1 into CCPR1
 }
 
@@ -189,7 +194,7 @@ void interrupt_speed(void)
 {
 	// tmr1 overflow, increment tmr1 "most significant bits" global var (since we can't set the prescaler high enough)
 	// THIS MUST COME BEFORE CCP HANDLER
-	if (tmr1if)
+	if (tmr1if)	// every 524.288 ms
 	{
 		tmr1_upper++;
 		// expire stale pulses
