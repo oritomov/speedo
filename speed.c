@@ -105,8 +105,8 @@ void calculate_speed(bit forceupdate)
 	gie = 0;
 
 	// This time, we cannot stop captures, so we should check consistency.
-	now.mid8 = tmr1h;
 	now.high8 = tmr1_upper;
+	now.mid8 = tmr1h;
 	now.low8 = tmr1l;
 
 	// if mid8 has changed, then low8 overflowed and high8 is also suspect.
@@ -149,7 +149,7 @@ void calculate_speed(bit forceupdate)
 		{
 			rollingsum[i] -= (rollingsum[i] >> (i+1));
 			rollingsum[i] += twopulse_delta;
-	}
+		}
 	}
 
 	// whichever of those is greater, call that "period"
