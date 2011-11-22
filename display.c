@@ -35,7 +35,7 @@ void check_display(void)
 		sevenseg_bits[12] = sevenseg_bits[11] = sevenseg_bits[10] = 
 		sevenseg_bits[9] = sevenseg_bits[8] = sevenseg_bits[7] = 
 		sevenseg_bits[6] = sevenseg_bits[5] = sevenseg_bits[4] = sevenseg_bits[3] =
-		sevenseg_bits[2] = sevenseg_bits[1] = sevenseg_bits[0] = 0xFF;
+		sevenseg_bits[2] = sevenseg_bits[1] = sevenseg_bits[0] = _all;
 	}
 	clear_wdt();
 
@@ -45,7 +45,7 @@ void check_display(void)
 		sevenseg_bits[12] = sevenseg_bits[11] = sevenseg_bits[10] = 
 		sevenseg_bits[9] = sevenseg_bits[8] = sevenseg_bits[7] = 
 		sevenseg_bits[6] = sevenseg_bits[5] = sevenseg_bits[4] = sevenseg_bits[3] =
-		sevenseg_bits[2] = sevenseg_bits[1] = sevenseg_bits[0] = 0x00;
+		sevenseg_bits[2] = sevenseg_bits[1] = sevenseg_bits[0] = _blank;
 	}
 	clear_wdt();
 }
@@ -54,11 +54,7 @@ void check_display(void)
 // These shouldn't need to be changed; if your wiring is different, change the SEVSEG macros at the start.
 unsigned char sevenseg_lookup(unsigned char digit)
 {
-	rom unsigned char* lookuptable = {SEVSEG_BITFIELD(0,0,1,1,1,1,1,1), SEVSEG_BITFIELD(0,0,0,0,0,1,1,0),
-							SEVSEG_BITFIELD(0,1,0,1,1,0,1,1), SEVSEG_BITFIELD(0,1,0,0,1,1,1,1),
-							SEVSEG_BITFIELD(0,1,1,0,0,1,1,0), SEVSEG_BITFIELD(0,1,1,0,1,1,0,1),
-							SEVSEG_BITFIELD(0,1,1,1,1,1,0,1), SEVSEG_BITFIELD(0,0,0,0,0,1,1,1),
-							SEVSEG_BITFIELD(0,1,1,1,1,1,1,1), SEVSEG_BITFIELD(0,1,1,0,1,1,1,1)  };
+	rom unsigned char* lookuptable = {_0, _1, _2, _3, _4, _5, _6, _7, _8, _9};
 
 	if (digit > 9)
 		return 0;
@@ -87,8 +83,8 @@ void display_speed(unsigned int speed)
 		temp_digit[2] = temp / 10;	// hundreds
 
 		gie = 0;
-		sevenseg_bits[2] = 0x00;
-		sevenseg_bits[1] = 0x00;
+		sevenseg_bits[2] = _blank;
+		sevenseg_bits[1] = _blank;
 
 		if (temp_digit[2] != 0)
 		{
@@ -130,8 +126,8 @@ void display_trip(unsigned int trip)
 	temp_digit[3] = temp_uchar / 10;	// hundreds
 
 	gie = 0;
-	sevenseg_bits[6] = 0x00;
-	sevenseg_bits[5] = 0x00;
+	sevenseg_bits[6] = _blank;
+	sevenseg_bits[5] = _blank;
 
 	if (temp_digit[3] != 0)
 	{
