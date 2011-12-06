@@ -51,18 +51,18 @@ void refresh_sevenseg(void)
 	static unsigned char current_digit;
 
 	// turn off all digit driver transistors
-
-	porta &= ~(SEVSEG_PORTA_MASK);
 	portb &= ~(SEVSEG_PORTB_MASK);
+	porta &= ~(SEVSEG_PORTA_MASK);
+	SEVSEG_DECIMAL_BIT = 0;
 
 	if (((!blink_enable) || (current_digit >= 3)) || (tmr1h & 0x80))
 	{
+		// turn on the current digit driver transistor
+		porta |= (SEVSEG_PORTA_MASK & sevenseg_driver[current_digit]);
 		// assign proper bits to the ports
 		portb |= (SEVSEG_PORTB_MASK & sevenseg_bits[current_digit]);
 		if (sevenseg_bits[current_digit] & SEVSEG_DECIMAL_MASK)
 			SEVSEG_DECIMAL_BIT = 1;	// don't forget decimal
-		// turn on the current digit driver transistor
-		porta |= (SEVSEG_PORTA_MASK & sevenseg_driver[current_digit]);
 		if (current_digit == 12)
 		{
 			// normally dim_factor is 0xFF, which means start again at case 0 next pass.

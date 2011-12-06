@@ -91,10 +91,12 @@ void main(void)
 {
 	// initialization of ports, timers, interrupts, variables, etc
 	cmcon = 0b00000111;
-	trisa = 0b00110000;		// 1 means high impedance (input)
-	trisb = 0b00001000;
-	porta = 0b00010000;		// 0 is low (gnd), 1 is high (5V)
-	portb = 0b00000000;
+	// 1 means high impedance (input)
+	trisa = 0b10100000;		// buton & lpg
+	trisb = 0b00001000;		// speedo
+	// 0 is low (gnd), 1 is high (5V)
+	porta = 0b00010000;		// xHx1xxxx
+	portb = 0b00000000;		// CDGAxBFE
 
 	clear_wdt();	// do this to avoid a reset
 

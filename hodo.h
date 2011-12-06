@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define LPG_INPUT							porta.4
+#define LPG_INPUT							porta.5
 
 void init_hodo(void);
 void read_trip(void);

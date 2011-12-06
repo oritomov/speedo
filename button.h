@@ -3,7 +3,7 @@
 
 #include "hodo.h"
 
-#define BUTTON_INPUT	porta.5
+#define BUTTON_INPUT	porta.7
 
 #define t0if			intcon.T0IF
 
