@@ -30,13 +30,20 @@ to compile with any program you wish, for any platform you wish.
 
 #pragma DATA _CONFIG, _LVP_OFF & _BOREN_ON & _MCLRE_OFF & _PWRTE_ON & _WDT_OFF & _INTOSC_OSC_NOCLKOUT
 
-// (14" * 2.54cm * 0.01 m/cm + 2 * 175mm * 0.001 m/mm * 70%) * pi => 1.89m winter
-// (14" * 2.54cm * 0.01 m/cm + 2 * 195mm * 0.001 m/mm * 60%) * pi => 1.85m summer
+// summer
+// (14" * 2.54cm * 0.01 m/cm + 2 * 195mm * 0.001 m/mm * 60%) * pi => 1.85m
 // 100m / 1.85m * 8 pulses/turn = 54 turns/100m * 8 pulses/turn = 432 pulses / 100m
 //#define DEFAULT_PULSES_IN_100M			445   // 432 + 3% = 13
 // 3600 sec/hr * 125000 bigticks/sec * 0.1 km => 45000000 smallticks * 100m / hr
 // 45000000 / 445 pulses_in_100m * 4 bigticks/smallticks = 25281
 //#define DEFAULT_CALIB_FACTOR				25281 // 26042 - 3% = 781
+
+// winter
+// (14" * 2.54cm * 0.01 m/cm + 2 * 175mm * 0.001 m/mm * 70%) * pi => 1.89m
+// 100m / 1.89m * 8 pulses/turn = 54 turns/100m * 8 pulses/turn = 432 pulses / 100m
+//#define DEFAULT_PULSES_IN_100M			410 // 424 - 3.3% = 14
+// 45000000 / 424 pulses_in_100m * 4 bigticks/smallticks = 26533
+//#define DEFAULT_CALIB_FACTOR				27439 // 26533 + 3.4% = 906
 
 #define MENU_TIMEOUT			12
 
