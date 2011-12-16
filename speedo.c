@@ -41,9 +41,9 @@ to compile with any program you wish, for any platform you wish.
 // winter
 // (14" * 2.54cm * 0.01 m/cm + 2 * 175mm * 0.001 m/mm * 70%) * pi => 1.89m
 // 100m / 1.89m * 8 pulses/turn = 54 turns/100m * 8 pulses/turn = 432 pulses / 100m
-//#define DEFAULT_PULSES_IN_100M			410 // 424 - 3.3% = 14
-// 45000000 / 424 pulses_in_100m * 4 bigticks/smallticks = 26533
-//#define DEFAULT_CALIB_FACTOR				27439 // 26533 + 3.4% = 906
+//#define DEFAULT_PULSES_IN_100M			438 // 424 + 3.3% = 14
+// 45000000 / 438 pulses_in_100m * 4 bigticks/smallticks = 25685
+//#define DEFAULT_CALIB_FACTOR				25685 // 26533 - 3.3% = 848
 
 #define MENU_TIMEOUT			12
 
