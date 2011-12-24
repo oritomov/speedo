@@ -82,23 +82,21 @@ void init_hodo(void)
 	read_trip();
 }
 
-// increments distance on every ten 100m
+// reads the trip fom EEPROM
 void read_trip(void)
 {
+	unsigned char temp1, temp2;
 	if (flag_lpg_mode)
 	{
-		unsigned char temp1, temp2;
 		temp1 = eeprom_read(eeprom_lpg_lo);
 		temp2 = eeprom_read(eeprom_lpg_hi);
-		MAKESHORT(trip, temp1, temp2);
 	}
 	else
 	{
-		unsigned char temp1, temp2;
 		temp1 = eeprom_read(eeprom_trip_lo);
 		temp2 = eeprom_read(eeprom_trip_hi);
-		MAKESHORT(trip, temp1, temp2);
 	}
+	MAKESHORT(trip, temp1, temp2);
 	trip_pulses = 0;
 }
 
@@ -142,7 +140,7 @@ void incr_distance(void)
 	} 
 }
 
-// Write a distance to the EEPROM.
+// Write a trip to the EEPROM.
 void write_trip(unsigned int trip)
 {
 	unsigned char to_write = 0xFF;
