@@ -11,7 +11,7 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ### Circuit
 
-http://speedo.googlecode.com/files/speedo.png
+![](http://speedo.googlecode.com/files/speedo.png)
 
 #### Modules
 
@@ -27,22 +27,22 @@ http://speedo.googlecode.com/files/speedo.png
 
 ### Main board
 
-http://speedo.googlecode.com/files/top_copper.png
+![](http://speedo.googlecode.com/files/top_copper.png)
 
 ## Releases
 
   * [AlphaPhase Alpha phase]
 
-  http://www.bgphoto.net/photos/16099/o633995982031250000.JPG
+  ![](http://www.bgphoto.net/photos/16099/o633995982031250000.JPG)
   
   * [BetaPhase Beta phase]
 
-  http://speedo.googlecode.com/files/DSC00362.JPG
+  ![](http://speedo.googlecode.com/files/DSC00362.JPG)
   
   * [GammaPhase Gamma phase]
 
-  http://speedo.googlecode.com/files/DSC00361.JPG
-  http://speedo.googlecode.com/files/DSC00363.JPG
+  ![](http://speedo.googlecode.com/files/DSC00361.JPG)
+  ![](http://speedo.googlecode.com/files/DSC00363.JPG)
 
 ## References
 
