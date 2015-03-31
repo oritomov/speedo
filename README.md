@@ -31,15 +31,15 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ## Releases
 
-  * [AlphaPhase Alpha phase]
+  * Alpha phase
 
   ![](http://www.bgphoto.net/photos/16099/o633995982031250000.JPG)
   
-  * [BetaPhase Beta phase]
+  * Beta phase
 
   ![](http://speedo.googlecode.com/files/DSC00362.JPG)
   
-  * [GammaPhase Gamma phase]
+  * Gamma phase
 
   ![](http://speedo.googlecode.com/files/DSC00361.JPG)
   ![](http://speedo.googlecode.com/files/DSC00363.JPG)
