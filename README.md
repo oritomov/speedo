@@ -1,45 +1,50 @@
-# speedo
+# Speedo
 The micro controller is based on PIC16F648A and 7 segment led displays. Presents digital speedometer and odometer. 
 
-= Introduction =
+## Introduction
 
 The micro controller presents digital speedometer and odometer. 
 It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 
-= Details =
+## Details
 
-== Circuit ==
+### Circuit
 
 http://speedo.googlecode.com/files/speedo.png
 
-=== Modules ===
+#### Modules
 
   * Pic - PIC16F648A
   * Decoder - SN74LS138N
   * Display - 7 segment led displays common cathode 
-  * 
-=== Inputs ===
+
+#### Inputs
 
   * Speedo Reed
   * LPG
   * Mode selector
-  * 
-== Main board ==
+
+### Main board
 
 http://speedo.googlecode.com/files/top_copper.png
 
-= Releases =
+## Releases
 
   * [AlphaPhase Alpha phase]
+
   http://www.bgphoto.net/photos/16099/o633995982031250000.JPG
+  
   * [BetaPhase Beta phase]
+
   http://speedo.googlecode.com/files/DSC00362.JPG
+  
   * [GammaPhase Gamma phase]
+
   http://speedo.googlecode.com/files/DSC00361.JPG
   http://speedo.googlecode.com/files/DSC00363.JPG
 
-= References =
+## References
 
   * [http://www.randomwisdom.com/2007/10/digital-speedometer-using-pic-microcontroller/ DIY digital speedometer using PIC microcontroller by Jeff Hiner] 
   * Microchip [http://www.microchip.com/wwwproducts/Devices.aspx?dDocName=en010212 PIC16F648A] [http://ww1.microchip.com/downloads/en/devicedoc/40044e.pdf Datasheet]
