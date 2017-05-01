@@ -11,12 +11,20 @@
 // 2ms
 #define SPEEDO_BOUNCE_THRESHOLD  16
 
-#define speedometer_pin 2
+class Speed {
+    int spidometer_pin;
+    unsigned int calib_factor;    // calibration factor used to calculate speed
+    unsigned int pulsecount;      // updated on each pulse.  Used for drag timing.
+    unsigned long lastpulses[2];  // the last two pulses received.  index 0 is last, index 1 is the one before that.
+    boolean lastpulse_stale0;
+    boolean lastpulse_stale1;     // if a pulse happened too long ago, it's stale and we can't do anything with it
 
-extern unsigned int speed;
+  public:
+    unsigned int speed;           // our current speed, calculated in main loop (unsigned char only goes to 255)
 
-void init_speed(void);
-void interrupt_speed(void);
-void calculate_speed(void);
+    void init(int spidometer_pin);
+    void interrupt(void);
+    void calculate(void);
+} speed;
 
-#endif
+#endif //speed_h
