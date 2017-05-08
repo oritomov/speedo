@@ -18,87 +18,68 @@ This program is free software: you can redistribute it and/or modify
 
 #include "display.h"
 
-void Display::init(void) {
-  // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
-  display.begin(SSD1306_SWITCHCAPVCC, I2C_ADDR);  // initialize with the I2C addr (for the 128x64)
-  // init done
+#define EOS 0
+#define ZERO 48
+#define SPACE 32
 
-  // Clear the buffer.
-  display.clearDisplay();
-  display.display();
+Display::Display(void): u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE) {
+}
+
+void Display::init(void) {
+  u8g2.begin();
 }
 
 // translate "speed" to BCD.  Blank leading zeroes, but if num is zero show 0 in ones digit.
 void Display::speed(unsigned int speed) {
-  byte temp_digit[3];
+  byte x = 4;
+  char temp_digit[4];
 
   // normally I'd use a for loop, but 8 bit division is much faster than 16 bit and we need the speed.
-  temp_digit[2] = speed % 10; // ones
+  temp_digit[3] = EOS;
+  temp_digit[2] = (speed % 10) + ZERO; // ones
   byte temp = speed / 10;
-  temp_digit[1] = temp % 10;  // tens
-  temp_digit[0] = temp / 10;  // hundreds
+  temp_digit[1] = temp % 10 + ZERO;  // tens
+  temp_digit[0] = temp / 10 + ZERO;  // hundreds
   
-  display.clearDisplay();
-  display.setCursor(30,20);
-  display.setTextSize(4);
-  display.setTextColor(WHITE);
-  if (temp_digit[0] == 0) {
-    display.setCursor(50,20);
-  } else {
-    display.print(temp_digit[0]);
+  if (temp_digit[0] == ZERO) {
+    temp_digit[0] = SPACE;
+    x += 2;
+    if (temp_digit[1] == ZERO) {
+      temp_digit[1] = SPACE;
+      x += 2;
+    }
   }
-  if ((temp_digit[0] == 0) && (temp_digit[1] == 0)) {
-    display.setCursor(70,20);
-  } else {
-    display.print(temp_digit[1]);
-  }
-  display.print(temp_digit[2]);
-  display.display();
+
+  u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_fub49_tn);
+    u8g2.drawStr(x,57,temp_digit);
+  } while ( u8g2.nextPage() );
 }
 
-void Display::mode(byte x, byte y, byte s, String text) {
-  display.clearDisplay();
-  display.setTextSize(s);
-  display.setTextColor(WHITE);
-  display.setCursor(x,y);
-  display.print(text);
-  display.display();
+void Display::mode(String text) {
+  char chr [text.length() + 1];
+  text.toCharArray(chr, text.length() + 1);
+  u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_fub30_tf);//u8g2_font_ncenB14_tr);
+    byte x = (128 - u8g2.getStrWidth(chr)) / 2;
+    u8g2.drawStr(x,47,chr);
+  } while ( u8g2.nextPage() );
 }
 
-void Display::mode(byte x, byte y, byte s, String text, int p) {
-  byte temp_digit[3];
-  boolean negative = false;
-  if (p < 0) {
-    p = -p;
-    negative = true;
-  }
-  // normally I'd use a for loop, but 8 bit division is much faster than 16 bit and we need the speed.
-  temp_digit[2] = p % 10; // ones
-  byte temp = p / 10;
-  temp_digit[1] = temp % 10;  // tens
-  temp_digit[0] = temp / 10;  // hundreds
-  
-  display.clearDisplay();
-  display.setTextSize(s);
-  display.setTextColor(WHITE);
-  display.setCursor(x,y);
-  display.print(text);
-  if (negative) {
-    display.setCursor(30,5);
-    display.print("-");
-  }
-  display.setCursor(30,5);
-  if (temp_digit[0] == 0) {
-    display.setCursor(50,5);
-  } else {
-    display.print(temp_digit[0]);
-  }
-  if ((temp_digit[0] == 0) && (temp_digit[1] == 0)) {
-    display.setCursor(70,5);
-  } else {
-    display.print(temp_digit[1]);
-  }
-  display.print(temp_digit[2]);
-  display.display();
+void Display::mode(String text, int p) {
+  char digit [4];
+  sprintf(digit, "%03i", p);  
+  char chr [text.length() + 1];
+  text.toCharArray(chr, text.length() + 1);
+  u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_fub30_tf);//u8g2_font_ncenB14_tr);
+    byte x = (128 - u8g2.getStrWidth(digit)) / 2;
+    u8g2.drawStr(x,30,digit);
+    x = (128 - u8g2.getStrWidth(chr)) / 2;
+    u8g2.drawStr(x,63,chr);
+  } while ( u8g2.nextPage() );
 }
 
