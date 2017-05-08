@@ -12,8 +12,8 @@ class Display {
   public:
     void init(void);
     void speed(unsigned int speed);
-    void mode(int x, int y, int s, String text);
-    void mode(int x, int y, int s, String text, int p);
+    void mode(byte x, byte y, byte s, String text);
+    void mode(byte x, byte y, byte s, String text, int p);
 } display;
 
 #endif //display_h

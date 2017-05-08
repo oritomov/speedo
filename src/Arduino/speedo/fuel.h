@@ -2,13 +2,12 @@
 #define fuel_h
 
 class Fuel {
-    int lpg_pin;
 
   public:
-    byte flag_lpg_reed;          // use for lpg reed signal.
-    byte flag_lpg_mode;          // use for unleaded or lpg mode.
+    boolean flag_lpg_reed;          // use for lpg reed signal.
+    boolean flag_lpg_mode;          // use for unleaded or lpg mode.
 
-    void init(int lpg_pin);
+    void init();
     void interrupt(void);
 } fuel;
 

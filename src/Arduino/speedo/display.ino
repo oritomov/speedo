@@ -30,11 +30,11 @@ void Display::init(void) {
 
 // translate "speed" to BCD.  Blank leading zeroes, but if num is zero show 0 in ones digit.
 void Display::speed(unsigned int speed) {
-  unsigned char temp_digit[3];
+  byte temp_digit[3];
 
   // normally I'd use a for loop, but 8 bit division is much faster than 16 bit and we need the speed.
   temp_digit[2] = speed % 10; // ones
-  unsigned char temp = speed / 10;
+  byte temp = speed / 10;
   temp_digit[1] = temp % 10;  // tens
   temp_digit[0] = temp / 10;  // hundreds
   
@@ -56,7 +56,7 @@ void Display::speed(unsigned int speed) {
   display.display();
 }
 
-void Display::mode(int x, int y, int s, String text) {
+void Display::mode(byte x, byte y, byte s, String text) {
   display.clearDisplay();
   display.setTextSize(s);
   display.setTextColor(WHITE);
@@ -65,8 +65,8 @@ void Display::mode(int x, int y, int s, String text) {
   display.display();
 }
 
-void Display::mode(int x, int y, int s, String text, int p) {
-  unsigned char temp_digit[3];
+void Display::mode(byte x, byte y, byte s, String text, int p) {
+  byte temp_digit[3];
   boolean negative = false;
   if (p < 0) {
     p = -p;
@@ -74,7 +74,7 @@ void Display::mode(int x, int y, int s, String text, int p) {
   }
   // normally I'd use a for loop, but 8 bit division is much faster than 16 bit and we need the speed.
   temp_digit[2] = p % 10; // ones
-  unsigned char temp = p / 10;
+  byte temp = p / 10;
   temp_digit[1] = temp % 10;  // tens
   temp_digit[0] = temp / 10;  // hundreds
   

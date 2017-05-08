@@ -36,9 +36,8 @@ void interrupt_speed(void) {
   speed.interrupt();
 }
 
-void Speed::init(int spidometer_pin)
+void Speed::init()
 {
-  Speed::spidometer_pin = spidometer_pin;
   lastpulse_stale0 = false; // both pulses are invalid on reset; we need to get TWO pulses in a reasonable time
   lastpulse_stale1 = false; // before doing any calculating.
   
@@ -58,14 +57,14 @@ void Speed::init(int spidometer_pin)
 //    EEPROM.write(EEPROM_CALIB_FACTOR_KPH_LO, lo);
   }
 
-  pinMode(spidometer_pin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(spidometer_pin), interrupt_speed, FALLING);
+  pinMode(SPEEDOMETER_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(SPEEDOMETER_PIN), interrupt_speed, FALLING);
 }
 
 // happens when we get a speedometer pulse.
 void Speed::interrupt(void)
 {
-  unsigned long now = micros() >> 7;//millis();
+  unsigned int now = micros() >> 7;//millis();
     
   // if it's too close to the last pulse, ignore it, it's just a bouncy switch
   if ((now - lastpulses[0]) > SPEEDO_BOUNCE_THRESHOLD)  // 2ms
@@ -86,7 +85,7 @@ void Speed::calculate()
 
   static bool lastupdatedtime = 0;
   static unsigned int rollingsum[6] = {0, 0, 0, 0, 0, 0}; // a rolling sum of the last 2, 4, 8, 16, 32, and 64 pulseswidths (estimated)
-  static unsigned char lastpulsecount = 0;    // the last known pulsecount, based on least significant 8 bits
+  static byte lastpulsecount = 0;    // the last known pulsecount, based on least significant 8 bits
                           // (only recalculate speed if we have another pulse)
 
   int newspeed; // signed int
@@ -94,7 +93,7 @@ void Speed::calculate()
   // if we don't have two valid pulses, we're done. Speed is zero.
   if (!lastpulse_stale1 || !lastpulse_stale0)
   {
-    unsigned char i;
+    byte i;
     for (i = 0; i < 6; i++)
       rollingsum[i] = 0;  // clear all rolling sums
     speed = 0;
@@ -102,19 +101,19 @@ void Speed::calculate()
   }
   
   // stop interrupt for a sec... we don't want the clocks messed with
-  detachInterrupt(digitalPinToInterrupt(spidometer_pin));
+  detachInterrupt(digitalPinToInterrupt(SPEEDOMETER_PIN));
 
   //Serial.println(lastpulses[0] - lastpulses[1]);
-  temp_lastpulses[1] = (int)lastpulses[1];
-  temp_lastpulses[0] = (int)lastpulses[0];
+  temp_lastpulses[1] = lastpulses[1];
+  temp_lastpulses[0] = lastpulses[0];
     
   // start the interrupt again
-  attachInterrupt(digitalPinToInterrupt(spidometer_pin), interrupt_speed, FALLING);
+  attachInterrupt(digitalPinToInterrupt(SPEEDOMETER_PIN), interrupt_speed, FALLING);
 
-  unsigned long now = micros() >> 7;//millis();
+  unsigned int now = micros() >> 7;//millis();
   
   // now.low16 = make16(now);
-  lastpulse_delta = (int)now;
+  lastpulse_delta = now;
   
   // calculate difference between last 2 pulses' clock
   twopulse_delta = temp_lastpulses[0] - temp_lastpulses[1];
@@ -122,12 +121,12 @@ void Speed::calculate()
   // lastpulse_delta = now.low16 - temp_lastpulses[0];
   lastpulse_delta -= temp_lastpulses[0];
 
-  if (lastpulsecount != (unsigned char)pulsecount)  // NOTE: only update rolling average of times between two pulses
+  if (lastpulsecount != pulsecount)  // NOTE: only update rolling average of times between two pulses
   {
     // we have a new pulse so we can update antijitter
-    lastpulsecount = (unsigned char)pulsecount;
+    lastpulsecount = pulsecount;
     // rollingsum[n] = ((2^n - 1) * rollingsum[n] / (2^n)) + (twopulse_delta)
-    unsigned char i;
+    byte i;
     for (i = 0; i < 6; i++)
     {
       rollingsum[i] -= (rollingsum[i] >> (i+1));
@@ -150,12 +149,12 @@ void Speed::calculate()
 
   int diff = 2;
   
-  unsigned char n = (unsigned int)newspeed / 10;
+  byte n = newspeed / 10;
 
   if (n != 0)  // if going faster than 10kph, use an appropriate rolling average
   {
     diff = 1;
-    unsigned char i = 0;  // "i" will tell us how many speed estimates to blend (2 for 10kph, 4 for 20, 8 for 40, and so on)
+    byte i = 0;  // "i" will tell us how many speed estimates to blend (2 for 10kph, 4 for 20, 8 for 40, and so on)
     while (n != 0)
     {
       n = n >> 1;
@@ -170,7 +169,7 @@ void Speed::calculate()
       newspeed = calib_factor / sumpulse;
   }
 
-  int t = (int)newspeed - speed;
+  int t = newspeed - speed;
   
 //  Serial.print(", ");
 //  Serial.print(diff);
@@ -197,7 +196,7 @@ void Speed::calculate()
   else
   {
     lastupdatedtime = now & 0x2000;
-    speed = (unsigned int)newspeed;
+    speed = newspeed;
 //    Serial.println(speed);
   }
 }

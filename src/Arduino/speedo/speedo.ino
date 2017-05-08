@@ -28,18 +28,29 @@ This program is free software: you can redistribute it and/or modify
 #define LPG_INPUT       3
 #define BUTTON_PIN      4
 
+#define DELAY           5000
+
+#define MSG_UNLEAD      "Unlead"
+#define MSG_LPG         "LPG"
+#define MSG_RESET       "Reset?"
+#define MSG_TIRES       "Tires?"
+#define MSG_WIDTH       "Width?"
+#define MSG_WALL        "Wall?"
+#define MSG_WHEEL       "Wheel?"
+#define MSG_FIX         "Fix?"
+#define MSG_NEXT        "Ok?"
+#define MSG_ERROR       "ERROR!"
+
 // The display unit's current task is defined by a state machine.  Normally on boot it defaults to MODE_SPD
 // which displays the current speed as a normal speedometer.
 // MSG_EEE is not a real mode, but it's here to prevent an overflow bug in sevenseg_text
-typedef enum { MSG_EEE,
-  MSG_UNL, MSG_LPG,
+typedef enum { MODE_EEE,
+  MODE_UNL, MODE_LPG,
   MODE_SPD, 
   MODE_MENU_CLR, MODE_CLR,
-#ifdef tires
   MODE_TIRE, 
     MODE_WIDTH, MODE_WALL, MODE_WHEEL, MODE_FIX,
       MODE_NEXT
-#endif //tires
 } mainmode;
 
 #define MODE_DEFAULT  MODE_SPD
@@ -50,10 +61,10 @@ mainmode current_mode;        // tells our state machine which task the main loo
 void setup() {
   Serial.begin(9600);
   display.init();
-  speed.init(SPEEDOMETER_PIN);
+  speed.init();
   hodo.init();
-  fuel.init(LPG_INPUT);
-  button.init(BUTTON_PIN);
+  fuel.init();
+  button.init();
   
   current_mode = MODE_DEFAULT;
 
@@ -68,7 +79,6 @@ SIGNAL(TIMER0_COMPA_vect) {
   button.interrupt();
 }
 
-#ifdef tires
 int read_tire(int eeprom, int _default, int step, int min) {
   int tire;
   tire = EEPROM.read(eeprom);
@@ -98,13 +108,12 @@ void calc_tire(void) {
   Serial.print("calib_factor = ");
   Serial.println(calib_factor);
 }
-#endif //tires
 
 void loop() {
   static int current, min, max, step, eeprom;
-  unsigned long previousMillis = millis();
+  unsigned int previousMillis = millis();
+  boolean lpg;
 
-#ifdef tires
   // force setup
   if (current_mode != MODE_NEXT) {
     if (EEPROM.read(EEPROM_WIDTH) == 0xFF) {
@@ -120,7 +129,6 @@ void loop() {
       current_mode = MODE_FIX;
     }
   }
-#endif //tires
 
   button.reset();
 
@@ -134,12 +142,12 @@ void loop() {
         display.speed(speed.speed);
         //display_trip(trip);
         //display_distance(distance);
-        boolean lpg = fuel.flag_lpg_reed;
+        lpg = fuel.flag_lpg_reed;
         if (lpg != fuel.flag_lpg_mode) {
           if (lpg) {
-            current_mode = MSG_LPG;
+            current_mode = MODE_LPG;
           } else {
-            current_mode = MSG_UNL;
+            current_mode = MODE_UNL;
           }
           fuel.flag_lpg_mode = lpg;
           break;
@@ -150,14 +158,14 @@ void loop() {
         current_mode = MODE_MENU_CLR;
       break;
 
-    case MSG_UNL:     // show mode
-    case MSG_LPG:
-      if (current_mode == MSG_UNL) {
-        display.mode(15, 20, 3, "Unlead");
-        Serial.println("Unlead");
+    case MODE_UNL:     // show mode
+    case MODE_LPG:
+      if (current_mode == MODE_UNL) {
+        display.mode(15, 20, 3, MSG_UNLEAD);
+        Serial.println(MSG_UNLEAD);
       } else {
-        display.mode(50, 20, 3, "LPG");
-        Serial.println("LPG");
+        display.mode(50, 20, 3, MSG_LPG);
+        Serial.println(MSG_LPG);
       }
       hodo.read_trip();
       while (true) {
@@ -165,7 +173,7 @@ void loop() {
         //write_distance();
         //display_trip(trip);
         //display_distance(distance);
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -174,23 +182,19 @@ void loop() {
       break;
 
     case MODE_MENU_CLR:   // show menu
-      Serial.println("Reset?");
-      //display_mode(15, 20, 3, "Reset?");
-      display.mode(15, 40, 3, "Reset?", hodo.trip /10);
+      Serial.println(MSG_RESET);
+      //display_mode(15, 20, 3, MSG_RESET);
+      display.mode(15, 40, 3, MSG_RESET, hodo.trip /10);
       while (true) {
 
         if (button.pressed) {
-#ifdef tires
           current_mode = MODE_TIRE;
-#else //tires
-          current_mode = MODE_DEFAULT;    // let's wrap around.
-#endif //tires
           break;
         } else if (button.held) {
           current_mode = MODE_CLR;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -198,16 +202,15 @@ void loop() {
       break;
 
     case MODE_CLR:      // clear trip
-      Serial.println("Reseting");
+      //Serial.println("Reseting");
       hodo.reset();
       //display_trip(trip);
       current_mode = MODE_SPD;
       break;
 
-#ifdef tires
     case MODE_TIRE:   // show menu
-      Serial.println("Tires?");
-      display.mode(15, 20, 3, "Tires?");
+      Serial.println(MSG_TIRES);
+      display.mode(15, 20, 3, MSG_TIRES);
       while (true) {
         if (button.pressed) {
           current_mode = MODE_DEFAULT;    // let's wrap around.
@@ -216,7 +219,7 @@ void loop() {
           current_mode = MODE_WIDTH;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -225,9 +228,9 @@ void loop() {
 
     case MODE_WIDTH:   // show menu
       current = read_tire(EEPROM_WIDTH, WIDTH_DEFAULT, WIDTH_STEP, WIDTH_MIN);
-      display.mode(15, 40, 3, "Width?", current);
+      display.mode(15, 40, 3, MSG_WIDTH, current);
       Serial.print(current);
-      Serial.println(" Width?");
+      Serial.println(MSG_WIDTH);
       while (true) {
 
         if (button.pressed) {
@@ -241,7 +244,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -250,9 +253,9 @@ void loop() {
 
     case MODE_WALL:   // show menu
       current = read_tire(EEPROM_WALL, WALL_DEFAULT, WALL_STEP, WALL_MIN);
-      display.mode(25, 40, 3, "Wall?", current);
+      display.mode(25, 40, 3, MSG_WALL, current);
       Serial.print(current);
-      Serial.println(" Wall?");
+      Serial.println(MSG_WALL);
       while (true) {
 
         if (button.pressed) {
@@ -266,7 +269,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -275,9 +278,9 @@ void loop() {
 
     case MODE_WHEEL:   // show menu
       current = read_tire(EEPROM_WHEEL, WHEEL_DEFAULT, WHEEL_STEP, WHEEL_MIN);
-      display.mode(15, 40, 3, "Wheel?", current);
+      display.mode(15, 40, 3, MSG_WHEEL, current);
       Serial.print(current);
-      Serial.println(" Wheel?");
+      Serial.println(MSG_WHEEL);
       while (true) {
 
         if (button.pressed) {
@@ -291,7 +294,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -300,9 +303,9 @@ void loop() {
 
     case MODE_FIX:   // show menu
       current = read_tire(EEPROM_FIX, FIX_DEFAULT, FIX_STEP, FIX_MIN);
-      display.mode(35, 40, 3, "Fix?", current);
+      display.mode(35, 40, 3, MSG_FIX, current);
       Serial.print(current);
-      Serial.println(" Fix?");
+      Serial.println(MSG_FIX);
       while (true) {
 
         if (button.pressed) {
@@ -316,7 +319,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -324,9 +327,9 @@ void loop() {
       break;
 
     case MODE_NEXT:   // show menu
-      display.mode(50, 40, 3, "Ok?", current);
+      display.mode(50, 40, 3, MSG_NEXT, current);
       Serial.print(current);
-      Serial.println(" Ok?");
+      Serial.println(MSG_NEXT);
       while (true) {
 
         if (button.pressed) {
@@ -344,17 +347,16 @@ void loop() {
           current_mode = MODE_DEFAULT;
           break;
         }
-        if (millis() - previousMillis > 5000) {
+        if (millis() - previousMillis > DELAY) {
           current_mode = MODE_DEFAULT;
           break;
         }
       }
       break;
-#endif //tires
 
     default:
-      display.mode(15, 20, 3, "ERROR!");
-      Serial.println("ERROR!");
+      display.mode(15, 20, 3, MSG_ERROR);
+      Serial.println(MSG_ERROR);
       // We should never arrive here.
       // if we're debugging, we want to know about this; print MSG_EEE and lockup.
       while (!button.pressed)

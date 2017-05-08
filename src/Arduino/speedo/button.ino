@@ -20,9 +20,8 @@ This program is free software: you can redistribute it and/or modify
 
 #define BUTTON_HELD 500
 
-void Button::init(int button_pin) {
-  Button::button_pin = button_pin;
-  pinMode(button_pin, INPUT_PULLUP);
+void Button::init() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
   heldcount = 0;
   reset();
 }
@@ -36,7 +35,7 @@ void Button::interrupt(void) {
   // button polling routine (every 32.768 ms)
 
   // the flags will be cleared externally
-  int button_input = digitalRead(button_pin);
+  boolean button_input = digitalRead(BUTTON_PIN);
 
   if (!button_input) { // if button is pressed, BUTTON_INPUT is held low.
     heldcount++;

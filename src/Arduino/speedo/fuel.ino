@@ -19,21 +19,20 @@ This program is free software: you can redistribute it and/or modify
 #include "fuel.h"
 
 // happens when we get a speedometer pulse.
-void interrupt_lpg(void) {
+void fuel_interrupt(void) {
   fuel.interrupt();
 }
 
 // init
-void Fuel::init(int lpg_pin) {
-  Fuel::lpg_pin = lpg_pin;
+void Fuel::init() {
   flag_lpg_reed = false;
   flag_lpg_mode = false;
 
-  pinMode(lpg_pin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(lpg_pin), interrupt_lpg, CHANGE);
+  pinMode(LPG_INPUT, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(LPG_INPUT), fuel_interrupt, CHANGE);
 }
 
 void Fuel::interrupt(void) {
-  flag_lpg_reed = !digitalRead(lpg_pin);  // if LPG is on, LPG_INPUT is held low.
+  flag_lpg_reed = !digitalRead(LPG_INPUT);  // if LPG is on, LPG_INPUT is held low.
 }
 
