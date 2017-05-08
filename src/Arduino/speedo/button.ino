@@ -20,10 +20,20 @@ This program is free software: you can redistribute it and/or modify
 
 #define BUTTON_HELD 500
 
+// Interrupt is called once a millisecond, 
+SIGNAL(TIMER0_COMPA_vect) {
+  button.interrupt();
+}
+
 void Button::init() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   heldcount = 0;
   reset();
+
+  // Timer0 is already used for millis() - we'll just interrupt somewhere
+  // in the middle and call the "Compare A" function below
+  OCR0A = 0xAF;
+  TIMSK0 |= _BV(OCIE0A); // Enable Output Compare Match A Interrupt
 }
 
 void Button::reset(void) {
