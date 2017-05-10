@@ -22,7 +22,7 @@ This program is free software: you can redistribute it and/or modify
 #define ZERO 48
 #define SPACE 32
 
-Display::Display(void): u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE) {
+Display::Display(const u8g2_cb_t *rotation, uint8_t reset): u8g2(rotation, reset) {
 }
 
 void Display::init(void) {
