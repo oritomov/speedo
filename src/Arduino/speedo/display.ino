@@ -22,7 +22,7 @@ This program is free software: you can redistribute it and/or modify
 #define ZERO 48
 #define SPACE 32
 
-Display::Display(const u8g2_cb_t *rotation, uint8_t reset): u8g2(rotation, reset) {
+Display::Display(byte resolution): u8g2(resolution) {
 }
 
 void Display::init(void) {
