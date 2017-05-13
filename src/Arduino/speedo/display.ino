@@ -62,7 +62,7 @@ void Display::mode(String text) {
   text.toCharArray(chr, text.length() + 1);
   u8g2.firstPage();
   do {
-    u8g2.setFont(u8g2_font_fub30_tf);//u8g2_font_ncenB14_tr);
+    u8g2.setFont(u8g2_font_fub30_tf);
     byte x = (128 - u8g2.getStrWidth(chr)) / 2;
     u8g2.drawStr(x,47,chr);
   } while ( u8g2.nextPage() );
@@ -75,7 +75,7 @@ void Display::mode(String text, int p) {
   text.toCharArray(chr, text.length() + 1);
   u8g2.firstPage();
   do {
-    u8g2.setFont(u8g2_font_fub30_tf);//u8g2_font_ncenB14_tr);
+    u8g2.setFont(u8g2_font_fub30_tf);
     byte x = (128 - u8g2.getStrWidth(digit)) / 2;
     u8g2.drawStr(x,30,digit);
     x = (128 - u8g2.getStrWidth(chr)) / 2;
