@@ -22,15 +22,19 @@ This program is free software: you can redistribute it and/or modify
 #define ZERO 48
 #define SPACE 32
 
-Display::Display(byte resolution): u8g2(resolution) {
+Abstract_Display::Abstract_Display(byte display): u8g2(display) {
+  Abstract_Display::display = display;
 }
 
-void Display::init(void) {
+void Abstract_Display::init(void) {
   u8g2.begin();
 }
 
+Big_Display::Big_Display(byte display): Abstract_Display(display) {
+}
+
 // translate "speed" to BCD.  Blank leading zeroes, but if num is zero show 0 in ones digit.
-void Display::speed(unsigned int speed) {
+void Big_Display::speed(unsigned int speed) {
   byte x = 4;
   char temp_digit[4];
 
@@ -57,7 +61,7 @@ void Display::speed(unsigned int speed) {
   } while ( u8g2.nextPage() );
 }
 
-void Display::mode(String text) {
+void Big_Display::mode(String text) {
   char chr [text.length() + 1];
   text.toCharArray(chr, text.length() + 1);
   u8g2.firstPage();
@@ -68,7 +72,7 @@ void Display::mode(String text) {
   } while ( u8g2.nextPage() );
 }
 
-void Display::mode(String text, int p) {
+void Big_Display::mode(String text, int p) {
   char digit [4];
   sprintf(digit, "%03i", p);  
   char chr [text.length() + 1];
