@@ -19,24 +19,32 @@ class U8G2_SSD1306_128X_I2C : public U8G2 {
   }
 };
 
-class Abstract_Display {
+class AbstractDisplay {
   protected:
     U8G2_SSD1306_128X_I2C u8g2;
-    byte display;
+    byte number;
 
-    Abstract_Display(byte display);
+    AbstractDisplay(byte number);
+    void display(u8g2_uint_t x, u8g2_uint_t y, const uint8_t *font, const char *str);
 
   public:
     void init(void);
 };
 
-class Big_Display: public Abstract_Display {
+class BigDisplay: public AbstractDisplay {
 
   public:
-    Big_Display(byte display);
+    BigDisplay(void);
     void speed(unsigned int speed);
     void mode(String text);
     void mode(String text, int p);
-} display(BIG_DISPLAY), display2(SMALL_DISPLAY);
+} display;
+
+class SmallDisplay: public AbstractDisplay {
+  
+  public:
+    SmallDisplay(void);
+    void trip(unsigned int trip);
+} smallDisplay;
 
 #endif //display_h
