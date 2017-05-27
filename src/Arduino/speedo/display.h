@@ -3,7 +3,7 @@
 
 #include <U8g2lib.h>
 
-#define I2C_ADDR 0x3C
+#define I2C_ADDR 0x70
 
 #define BIG_DISPLAY 1
 #define SMALL_DISPLAY 2
@@ -20,10 +20,13 @@ class U8G2_SSD1306_128X_I2C : public U8G2 {
 };
 
 class AbstractDisplay {
-  protected:
+  private:
     U8G2_SSD1306_128X_I2C u8g2;
     byte number;
 
+    void on(void);
+
+  protected:
     AbstractDisplay(byte number);
     void display(u8g2_uint_t x, u8g2_uint_t y, const uint8_t *font, const char *str);
 
@@ -37,14 +40,14 @@ class BigDisplay: public AbstractDisplay {
     BigDisplay(void);
     void speed(unsigned int speed);
     void mode(String text);
-    void mode(String text, int p);
-} display;
+} bigDisplay;
 
 class SmallDisplay: public AbstractDisplay {
   
   public:
     SmallDisplay(void);
     void trip(unsigned int trip);
+    void num(int num);
 } smallDisplay;
 
 #endif //display_h

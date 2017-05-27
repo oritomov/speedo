@@ -60,7 +60,8 @@ mainmode current_mode;        // tells our state machine which task the main loo
 
 void setup() {
   Serial.begin(9600);
-  display.init();
+  bigDisplay.init();
+  smallDisplay.init();
   speed.init();
   hodo.init();
   fuel.init();
@@ -129,9 +130,9 @@ void loop() {
       while (!button.pressed) {
         speed.calculate();
         hodo.write_distance();
-        display.speed(speed.speed);
-        //display_trip(trip);
-        //display_distance(distance);
+        bigDisplay.speed(speed.speed);
+        smallDisplay.trip(hodo.trip);
+        //display.distance(hodo.distance);
         lpg = fuel.flag_lpg_reed;
         if (lpg != fuel.flag_lpg_mode) {
           if (lpg) {
@@ -151,10 +152,10 @@ void loop() {
     case MODE_UNL:     // show mode
     case MODE_LPG:
       if (current_mode == MODE_UNL) {
-        display.mode(MSG_UNLEAD);
+        bigDisplay.mode(MSG_UNLEAD);
         Serial.println(MSG_UNLEAD);
       } else {
-        display.mode(MSG_LPG);
+        bigDisplay.mode(MSG_LPG);
         Serial.println(MSG_LPG);
       }
       hodo.read_trip();
@@ -173,7 +174,8 @@ void loop() {
 
     case MODE_MENU_CLR:   // show menu
       Serial.println(MSG_RESET);
-      display.mode(MSG_RESET, hodo.trip /10);
+      bigDisplay.mode(MSG_RESET);
+      smallDisplay.trip(hodo.trip);
       while (true) {
 
         if (button.pressed) {
@@ -199,7 +201,7 @@ void loop() {
 
     case MODE_TIRE:   // show menu
       Serial.println(MSG_TIRES);
-      display.mode(MSG_TIRES);
+      bigDisplay.mode(MSG_TIRES);
       while (true) {
         if (button.pressed) {
           current_mode = MODE_DEFAULT;    // let's wrap around.
@@ -217,7 +219,8 @@ void loop() {
 
     case MODE_WIDTH:   // show menu
       current = read_tire(EEPROM_WIDTH, WIDTH_DEFAULT, WIDTH_STEP, WIDTH_MIN);
-      display.mode(MSG_WIDTH, current);
+      bigDisplay.mode(MSG_WIDTH);
+      smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_WIDTH);
       while (true) {
@@ -242,7 +245,8 @@ void loop() {
 
     case MODE_WALL:   // show menu
       current = read_tire(EEPROM_WALL, WALL_DEFAULT, WALL_STEP, WALL_MIN);
-      display.mode(MSG_WALL, current);
+      bigDisplay.mode(MSG_WALL);
+      smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_WALL);
       while (true) {
@@ -267,7 +271,8 @@ void loop() {
 
     case MODE_WHEEL:   // show menu
       current = read_tire(EEPROM_WHEEL, WHEEL_DEFAULT, WHEEL_STEP, WHEEL_MIN);
-      display.mode(MSG_WHEEL, current);
+      bigDisplay.mode(MSG_WHEEL);
+      smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_WHEEL);
       while (true) {
@@ -292,7 +297,8 @@ void loop() {
 
     case MODE_FIX:   // show menu
       current = read_tire(EEPROM_FIX, FIX_DEFAULT, FIX_STEP, FIX_MIN);
-      display.mode(MSG_FIX, current);
+      bigDisplay.mode(MSG_FIX);
+      smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_FIX);
       while (true) {
@@ -316,7 +322,8 @@ void loop() {
       break;
 
     case MODE_NEXT:   // show menu
-      display.mode(MSG_NEXT, current);
+      bigDisplay.mode(MSG_NEXT);
+      smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_NEXT);
       while (true) {
@@ -344,7 +351,7 @@ void loop() {
       break;
 
     default:
-      display.mode(MSG_ERROR);
+      bigDisplay.mode(MSG_ERROR);
       Serial.println(MSG_ERROR);
       // We should never arrive here.
       // if we're debugging, we want to know about this; print MSG_EEE and lockup.

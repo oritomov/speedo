@@ -17,6 +17,7 @@ This program is free software: you can redistribute it and/or modify
 */
 
 #include "display.h"
+#include <Wire.h>
 
 #define EOS 0
 #define ZERO 48
@@ -25,14 +26,22 @@ This program is free software: you can redistribute it and/or modify
 AbstractDisplay::AbstractDisplay(byte number): u8g2(number), number(number) {
 }
 
+void AbstractDisplay::on(void) {
+  Wire.begin(I2C_ADDR);
+  Wire.beginTransmission(I2C_ADDR);
+  Wire.write(number);
+  Wire.endTransmission();
+}
+
 void AbstractDisplay::init(void) {
-  // todo: on display number
+  on();
+
   u8g2.begin();
-  // todo: off display num
 }
 
 void AbstractDisplay::display(u8g2_uint_t x, u8g2_uint_t y, const uint8_t *font, const char *str) {
-  // todo: on display number
+  on();
+
   u8g2.firstPage();
   do {
     u8g2.setFont(font);
@@ -41,7 +50,6 @@ void AbstractDisplay::display(u8g2_uint_t x, u8g2_uint_t y, const uint8_t *font,
     }
     u8g2.drawStr(x, y, str);
   } while ( u8g2.nextPage() );
-  // todo: off display num
 }
 
 BigDisplay::BigDisplay(void): AbstractDisplay(BIG_DISPLAY) {
@@ -79,21 +87,6 @@ void BigDisplay::mode(String text) {
   display(128, 47, u8g2_font_fub30_tf, chr);
 }
 
-void BigDisplay::mode(String text, int p) {
-  char digit [4];
-  sprintf(digit, "%03i", p);  
-  char chr [text.length() + 1];
-  text.toCharArray(chr, text.length() + 1);
-  u8g2.firstPage();
-  do {
-    u8g2.setFont(u8g2_font_fub30_tf);
-    byte x = (128 - u8g2.getStrWidth(digit)) / 2;
-    u8g2.drawStr(x,30,digit);
-    x = (128 - u8g2.getStrWidth(chr)) / 2;
-    u8g2.drawStr(x,63,chr);
-  } while ( u8g2.nextPage() );
-}
-
 SmallDisplay::SmallDisplay(void): AbstractDisplay(SMALL_DISPLAY) {
 }
 
@@ -113,5 +106,12 @@ void SmallDisplay::trip(unsigned int trip) {
   temp_digit[0] = temp / 10 + ZERO;  // hundreds
 
   display(14, 31, u8g2_font_fub30_tf, temp_digit);
+}
+
+void SmallDisplay::num(int num) {
+  char digit [4];
+  sprintf(digit, "%i", num);
+  
+  display(128, 31, u8g2_font_fub30_tf, digit);
 }
 
