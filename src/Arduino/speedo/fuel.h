@@ -4,8 +4,8 @@
 class Fuel {
 
   public:
-    boolean flag_lpg_reed;          // use for lpg reed signal.
-    boolean flag_lpg_mode;          // use for unleaded or lpg mode.
+    boolean flag_lpg_reed:1;          // use for lpg reed signal.
+    boolean flag_lpg_mode:1;          // use for unleaded or lpg mode.
 
     void init();
     void interrupt(void);

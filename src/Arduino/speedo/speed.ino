@@ -24,12 +24,7 @@ and accurately.  However, this can cause the display to oscillate rapidly
 between two speeds, for example 38 and 40.
 */
 
-#include <EEPROM.h>
 #include "speed.h"
-
-// eeprom
-#define EEPROM_CALIB_FACTOR_KPH_LO  0
-#define EEPROM_CALIB_FACTOR_KPH_HI  1
 
 // happens when we get a speedometer pulse.
 void interrupt_speed(void) {
@@ -41,21 +36,7 @@ void Speed::init()
   lastpulse_stale0 = false; // both pulses are invalid on reset; we need to get TWO pulses in a reasonable time
   lastpulse_stale1 = false; // before doing any calculating.
   
-  // calib_factor
-  {
-    byte hi, lo;
-    hi = EEPROM.read(EEPROM_CALIB_FACTOR_KPH_HI);
-    lo = EEPROM.read(EEPROM_CALIB_FACTOR_KPH_LO);
-    calib_factor = word(hi, lo);
-    Serial.print("calib_factor = ");
-    Serial.println(calib_factor);
-//    if (calib_factor == 0xffff)
-//      calib_factor = DEFAULT_CALIB_FACTOR;
-//    byte hi = highByte(calib_factor);
-//    byte lo = lowByte(calib_factor);
-//    EEPROM.write(EEPROM_CALIB_FACTOR_KPH_HI, hi);
-//    EEPROM.write(EEPROM_CALIB_FACTOR_KPH_LO, lo);
-  }
+  calib_factor = eeprom_calib_factor();
 
   pinMode(SPEEDOMETER_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(SPEEDOMETER_PIN), interrupt_speed, FALLING);

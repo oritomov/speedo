@@ -93,11 +93,15 @@ void calc_tire(void) {
   unsigned int pulses_in_100m = (int)(8. * 100. * (1. + (float)fix / 100.) / (((float)wheel * 2.54 * 0.01 + 2. * (float)width * 0.001 * ((float)wall / 100.)) * 3.14));
   Serial.print("pulses in 100m = ");
   Serial.println(pulses_in_100m);
+  eeprom_pulses_in_100m(pulses_in_100m);
+  hodo.init();
 // 3600 sec/h * 1000000 us/sec * 0.1 km / 128 = 2812500 us * 100m / h
 // 2812500 / 432 pulses_in_100m = 6510
   unsigned int calib_factor = 2812500 / pulses_in_100m;
   Serial.print("calib_factor = ");
   Serial.println(calib_factor);
+  eeprom_calib_factor(calib_factor);
+  speed.init();
 }
 
 void loop() {
@@ -158,7 +162,7 @@ void loop() {
         bigDisplay.mode(MSG_LPG);
         Serial.println(MSG_LPG);
       }
-      hodo.read_trip();
+      hodo.read_trip(fuel.flag_lpg_mode);
       while (true) {
         //calculate_speed(0);
         //write_distance();
