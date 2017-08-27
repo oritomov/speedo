@@ -159,8 +159,9 @@ void loop() {
         }
       }
       // switch to first menu state
-      if (current_mode == MODE_SPD)
+      if (current_mode == MODE_SPD) {
         current_mode = MODE_MENU_CLR;
+      }
       break;
 
     case MODE_UNL:     // show mode
@@ -369,8 +370,8 @@ void loop() {
       Serial.println(MSG_ERROR);
       // We should never arrive here.
       // if we're debugging, we want to know about this; print MSG_EEE and lockup.
-      while (!button.pressed)
-        ;
+      while (!button.pressed) {
+      }
       // if we're not debugging, just get us back into MODE_DEFAULT.
       current_mode = MODE_DEFAULT;
   }
