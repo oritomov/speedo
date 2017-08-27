@@ -45,7 +45,7 @@ void Speed::init()
 // happens when we get a speedometer pulse.
 void Speed::interrupt(void)
 {
-  unsigned int now = micros() >> 7;//millis();
+  unsigned int now = micros() >> DIVIDER;//millis();
     
   // if it's too close to the last pulse, ignore it, it's just a bouncy switch
   if ((now - lastpulses[0]) > SPEEDO_BOUNCE_THRESHOLD)  // 2ms
@@ -91,7 +91,7 @@ void Speed::calculate()
   // start the interrupt again
   attachInterrupt(digitalPinToInterrupt(SPEEDOMETER_PIN), interrupt_speed, FALLING);
 
-  unsigned int now = micros() >> 7;//millis();
+  unsigned int now = micros() >> DIVIDER;//millis();
   
   // now.low16 = make16(now);
   lastpulse_delta = now;
@@ -169,13 +169,10 @@ void Speed::calculate()
 ////  Serial.println(speed);
   
   // we don't want to update the display if it hasn't changed much and it was already updated recently (within the last 0.25sec)
-  if ((diff > t) && (t > -diff) && (lastupdatedtime == (bool)(now & 0x2000)))
-//  {
+  if ((diff > t) && (t > -diff) && (lastupdatedtime == (bool)(now & 0x2000))) {
 //    Serial.println(speed);
     return;
-//  }
-  else
-  {
+  } else {
     lastupdatedtime = now & 0x2000;
     speed = newspeed;
 //    Serial.println(speed);

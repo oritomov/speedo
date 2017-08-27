@@ -95,9 +95,9 @@ void calc_tire(void) {
   Serial.println(pulses_in_100m);
   eeprom_pulses_in_100m(pulses_in_100m);
   hodo.init();
-// 3600 sec/h * 1000000 us/sec * 0.1 km / 128 = 2812500 us * 100m / h
-// 2812500 / 432 pulses_in_100m = 6510
-  unsigned int calib_factor = 2812500 / pulses_in_100m;
+// 3600 sec/h * 1000000 us/sec * 0.1 km / 32 = 11250000 us * 100m / h
+// 11250000 / 432 pulses_in_100m = 26042
+  unsigned int calib_factor = 11250000 / pulses_in_100m;
   Serial.print("calib_factor = ");
   Serial.println(calib_factor);
   eeprom_calib_factor(calib_factor);
