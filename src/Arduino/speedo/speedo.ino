@@ -73,7 +73,7 @@ void setup() {
 int read_tire(int eeprom, int _default, int step, int min) {
   int tire;
   tire = EEPROM.read(eeprom);
-  if (tire = 0xFF) {
+  if (tire == 0xFF) {
     tire = _default;
   } else {
     tire *= step;
