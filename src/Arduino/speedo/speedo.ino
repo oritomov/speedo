@@ -104,6 +104,16 @@ void calc_tire(void) {
   speed.init();
 }
 
+bool isEnough(unsigned int previousMillis) {
+  unsigned int currMillis = millis();
+//  Serial.print("prev: ");
+//  Serial.print(previousMillis);
+//  Serial.print(", millis: ");
+//  Serial.print(currMillis);
+//  Serial.println();
+  return (currMillis - previousMillis > DELAY);
+}
+
 void loop() {
   static int current, min, max, step, eeprom;
   unsigned int previousMillis = millis();
@@ -168,7 +178,7 @@ void loop() {
         //write_distance();
         //display_trip(trip);
         //display_distance(distance);
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -189,7 +199,7 @@ void loop() {
           current_mode = MODE_CLR;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -214,7 +224,7 @@ void loop() {
           current_mode = MODE_WIDTH;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -240,7 +250,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -266,7 +276,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -292,7 +302,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -318,7 +328,7 @@ void loop() {
           current_mode = MODE_NEXT;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
@@ -347,7 +357,7 @@ void loop() {
           current_mode = MODE_DEFAULT;
           break;
         }
-        if (millis() - previousMillis > DELAY) {
+        if (isEnough(previousMillis)) {
           current_mode = MODE_DEFAULT;
           break;
         }
