@@ -18,8 +18,6 @@ This program is free software: you can redistribute it and/or modify
 
 #include "button.h"
 
-#define BUTTON_HELD 500
-
 // Interrupt is called once a millisecond, 
 SIGNAL(TIMER0_COMPA_vect) {
   button.interrupt();
@@ -27,7 +25,7 @@ SIGNAL(TIMER0_COMPA_vect) {
 
 void Button::init() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
-  heldcount = 0;
+  held_count = 0;
   reset();
 
   // Timer0 is already used for millis() - we'll just interrupt somewhere
@@ -37,36 +35,50 @@ void Button::init() {
 }
 
 void Button::reset(void) {
-  pressed = false;
-  held = false;
+  rlsd_count = 0;
+  status = BUTTON_STATUS_NONE;
+  Serial.println("button init");
 }
 
+// button polling routine (every 32.768 ms)
 void Button::interrupt(void) {
-  // button polling routine (every 32.768 ms)
 
   // the flags will be cleared externally
   boolean button_input = digitalRead(BUTTON_PIN);
 
   if (!button_input) { // if button is pressed, BUTTON_INPUT is held low.
-    heldcount++;
+    held_count++;
     
     // if the button has been on 30 times in a row (about 1 second), flag it as being held
-    if (heldcount == BUTTON_HELD)
-      held = true;
+    if (held_count == BUTTON_HELD) {
+      status = BUTTON_STATUS_HELD;
+      Serial.println("button held");
       
     // if the button has been on more than 30 times in a row, we've already flagged it as held
     // if the button has been on THIS long, the user is obviously on drugs
-    else if (heldcount == 0xFFF)
-      heldcount--; // so as not to overflow
+    } else if (held_count == 0xFFF) {
+      held_count--; // so as not to overflow
+    }
+
+    rlsd_count = 0;
   } else {
     // if the button hasn't been pressed, nothing to report.
     // if the button was released after being on once or twice, it was a glitch.
     // if the button was released after being on between 2 and 29 times in a row, it was pressed
-    if ((heldcount > 1) && (heldcount < BUTTON_HELD))
-      pressed = true;
-      
+    if ((held_count > 1) && (held_count < BUTTON_HELD)) {
+      status = BUTTON_STATUS_PRESSED;
+      Serial.println("button pressed");
+    }
     // if the button was released after being on more than that, we already flagged it as held.
-    heldcount = 0;
+    held_count = 0;
+
+    rlsd_count++;
+    if (rlsd_count == BUTTON_DELAY) {
+      status = BUTTON_STATUS_TIMEOUT;
+      Serial.println("button time out");
+    } else if (rlsd_count > BUTTON_DELAY) {
+      rlsd_count--; // so as not to overflow
+    }
   }
 }
 

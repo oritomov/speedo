@@ -28,8 +28,6 @@ This program is free software: you can redistribute it and/or modify
 #define LPG_INPUT       3
 #define BUTTON_PIN      4
 
-#define DELAY           5000
-
 #define MSG_UNLEAD      "Unlead"
 #define MSG_LPG         "LPG"
 #define MSG_RESET       "Reset?"
@@ -96,7 +94,7 @@ void calc_tire(void) {
   eeprom_pulses_in_100m(pulses_in_100m);
   hodo.init();
 // 3600 sec/h * 1000000 us/sec * 0.1 km / 32 = 11250000 us * 100m / h
-// 11250000 / 432 pulses_in_100m = 26042
+// 11250000 / 432 pulses_in_100m = 26041.67
   unsigned int calib_factor = 11250000 / pulses_in_100m;
   Serial.print("calib_factor = ");
   Serial.println(calib_factor);
@@ -104,44 +102,54 @@ void calc_tire(void) {
   speed.init();
 }
 
-bool isEnough(unsigned int previousMillis) {
-  unsigned int currMillis = millis();
-//  Serial.print("prev: ");
-//  Serial.print(previousMillis);
-//  Serial.print(", millis: ");
-//  Serial.print(currMillis);
-//  Serial.println();
-  return (currMillis - previousMillis > DELAY);
+void set_mode_and_reset_button(mainmode mode) {
+  switch (current_mode) {
+    case MODE_SPD:  // calculate and show current speed until a button is held
+      Serial.println("Speed");
+      break;
+    case MODE_UNL:     // show mode
+      Serial.println(MSG_UNLEAD);
+      break;
+    case MODE_LPG:
+      Serial.println(MSG_LPG);
+      break;
+    case MODE_MENU_CLR:   // show menu
+      Serial.println(MSG_RESET);
+      break;
+    case MODE_CLR:      // clear trip
+      break;
+    case MODE_TIRE:   // show menu
+      Serial.println(MSG_TIRES);
+    
+  }
+  current_mode = mode;
+  button.reset();
 }
 
 void loop() {
   static int current, min, max, step, eeprom;
-  unsigned int previousMillis = millis();
   boolean lpg;
 
   // force setup
   if (current_mode != MODE_NEXT) {
     if (EEPROM.read(EEPROM_WIDTH) == 0xFF) {
-      current_mode = MODE_WIDTH;
+      set_mode_and_reset_button(MODE_WIDTH);
     } else
     if (EEPROM.read(EEPROM_WALL) == 0xFF) {
-      current_mode = MODE_WALL;
+      set_mode_and_reset_button(MODE_WALL);
     } else
     if (EEPROM.read(EEPROM_WHEEL) == 0xFF) {
-      current_mode = MODE_WHEEL;
+      set_mode_and_reset_button(MODE_WHEEL);
     } else 
     if (EEPROM.read(EEPROM_FIX) == 0xFF) {
-      current_mode = MODE_FIX;
+      set_mode_and_reset_button(MODE_FIX);
     }
   }
-
-  button.reset();
 
   switch (current_mode) {
 
     case MODE_SPD:  // calculate and show current speed until a button is held
-      Serial.println("Speed");
-      while (!button.pressed) {
+//      Serial.println("Speed");
         speed.calculate();
         hodo.write_distance();
         bigDisplay.speed(speed.speed);
@@ -150,17 +158,14 @@ void loop() {
         lpg = fuel.flag_lpg_reed;
         if (lpg != fuel.flag_lpg_mode) {
           if (lpg) {
-            current_mode = MODE_LPG;
+            set_mode_and_reset_button(MODE_LPG);
           } else {
-            current_mode = MODE_UNL;
+            set_mode_and_reset_button(MODE_UNL);
           }
           fuel.flag_lpg_mode = lpg;
-          break;
         }
-      }
-      // switch to first menu state
-      if (current_mode == MODE_SPD) {
-        current_mode = MODE_MENU_CLR;
+      if (button.status == BUTTON_STATUS_PRESSED) {
+        set_mode_and_reset_button(MODE_MENU_CLR);
       }
       break;
 
@@ -168,42 +173,37 @@ void loop() {
     case MODE_LPG:
       if (current_mode == MODE_UNL) {
         bigDisplay.mode(MSG_UNLEAD);
-        Serial.println(MSG_UNLEAD);
+//        Serial.println(MSG_UNLEAD);
       } else {
         bigDisplay.mode(MSG_LPG);
-        Serial.println(MSG_LPG);
+//        Serial.println(MSG_LPG);
       }
       hodo.read_trip(fuel.flag_lpg_mode);
-      while (true) {
+      switch (button.status) {
         //calculate_speed(0);
         //write_distance();
         //display_trip(trip);
         //display_distance(distance);
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
-      current_mode = MODE_SPD;
       break;
 
     case MODE_MENU_CLR:   // show menu
-      Serial.println(MSG_RESET);
+//      Serial.println(MSG_RESET);
       bigDisplay.mode(MSG_RESET);
       smallDisplay.trip(hodo.trip);
-      while (true) {
-
-        if (button.pressed) {
-          current_mode = MODE_TIRE;
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
+          set_mode_and_reset_button(MODE_TIRE);
           break;
-        } else if (button.held) {
-          current_mode = MODE_CLR;
+        case BUTTON_STATUS_HELD:
+          set_mode_and_reset_button(MODE_CLR);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -211,24 +211,22 @@ void loop() {
       //Serial.println("Reseting");
       hodo.reset();
       //display_trip(trip);
-      current_mode = MODE_SPD;
+      set_mode_and_reset_button(MODE_SPD);
       break;
 
     case MODE_TIRE:   // show menu
-      Serial.println(MSG_TIRES);
+//      Serial.println(MSG_TIRES);
       bigDisplay.mode(MSG_TIRES);
-      while (true) {
-        if (button.pressed) {
-          current_mode = MODE_DEFAULT;    // let's wrap around.
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
+          set_mode_and_reset_button(MODE_DEFAULT);    // let's wrap around.
           break;
-        } else if (button.held) {
-          current_mode = MODE_WIDTH;
+        case BUTTON_STATUS_HELD:
+          set_mode_and_reset_button(MODE_WIDTH);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -238,23 +236,20 @@ void loop() {
       smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_WIDTH);
-      while (true) {
-
-        if (button.pressed) {
-          current_mode = MODE_WALL;
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
+          set_mode_and_reset_button(MODE_WALL);
           break;
-        } else if (button.held) {
+        case BUTTON_STATUS_HELD:
           min = WIDTH_MIN;
           max = WIDTH_MAX;
           step = WIDTH_STEP;
           eeprom = EEPROM_WIDTH;
-          current_mode = MODE_NEXT;
+          set_mode_and_reset_button(MODE_NEXT);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -264,23 +259,20 @@ void loop() {
       smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_WALL);
-      while (true) {
-
-        if (button.pressed) {
-          current_mode = MODE_WHEEL;
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
+          set_mode_and_reset_button(MODE_WHEEL);
           break;
-        } else if (button.held) {
+        case BUTTON_STATUS_HELD:
           min = WALL_MIN;
           max = WALL_MAX;
           step = WALL_STEP;
           eeprom = EEPROM_WALL;
-          current_mode = MODE_NEXT;
+          set_mode_and_reset_button(MODE_NEXT);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -290,23 +282,20 @@ void loop() {
       smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_WHEEL);
-      while (true) {
-
-        if (button.pressed) {
-          current_mode = MODE_FIX;
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
+          set_mode_and_reset_button(MODE_FIX);
           break;
-        } else if (button.held) {
+        case BUTTON_STATUS_HELD:
           min = WHEEL_MIN;
           max = WHEEL_MAX;
           step = WHEEL_STEP;
           eeprom = EEPROM_WHEEL;
-          current_mode = MODE_NEXT;
+          set_mode_and_reset_button(MODE_NEXT);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -316,23 +305,20 @@ void loop() {
       smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_FIX);
-      while (true) {
-
-        if (button.pressed) {
-          current_mode = MODE_DEFAULT;    // let's wrap around.
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
+          set_mode_and_reset_button(MODE_DEFAULT);    // let's wrap around.
           break;
-        } else if (button.held) {
+        case BUTTON_STATUS_HELD:
           min = FIX_MIN;
           max = FIX_MAX;
           step = FIX_STEP;
           eeprom = EEPROM_FIX;
-          current_mode = MODE_NEXT;
+          set_mode_and_reset_button(MODE_NEXT);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -341,27 +327,24 @@ void loop() {
       smallDisplay.num(current);
       Serial.print(current);
       Serial.println(MSG_NEXT);
-      while (true) {
-
-        if (button.pressed) {
+      switch (button.status) {
+        case BUTTON_STATUS_PRESSED:
           current += step;
           if (current > max) {
             current = min;
           }
-          current_mode = MODE_NEXT;
+          set_mode_and_reset_button(MODE_NEXT);
           break;
-        } else if (button.held) {
+        case BUTTON_STATUS_HELD:
           current -= min;
           current /= step;
-          EEPROM.write(eeprom, current);
+          write(eeprom, (byte)current);
           calc_tire();
-          current_mode = MODE_DEFAULT;
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
-        if (isEnough(previousMillis)) {
-          current_mode = MODE_DEFAULT;
+        case BUTTON_STATUS_TIMEOUT:
+          set_mode_and_reset_button(MODE_DEFAULT);
           break;
-        }
       }
       break;
 
@@ -370,10 +353,10 @@ void loop() {
       Serial.println(MSG_ERROR);
       // We should never arrive here.
       // if we're debugging, we want to know about this; print MSG_EEE and lockup.
-      while (!button.pressed) {
+      while (button.status == BUTTON_STATUS_NONE) {
       }
       // if we're not debugging, just get us back into MODE_DEFAULT.
-      current_mode = MODE_DEFAULT;
+      set_mode_and_reset_button(MODE_DEFAULT);
+      break;
   }
 }
-
