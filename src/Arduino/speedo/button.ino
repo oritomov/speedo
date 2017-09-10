@@ -18,7 +18,7 @@ This program is free software: you can redistribute it and/or modify
 
 #include "button.h"
 
-// Interrupt is called once a millisecond, 
+// Interrupt is called once in a millisecond 
 SIGNAL(TIMER0_COMPA_vect) {
   button.interrupt();
 }
@@ -28,10 +28,26 @@ void Button::init() {
   held_count = 0;
   reset();
 
-  // Timer0 is already used for millis() - we'll just interrupt somewhere
-  // in the middle and call the "Compare A" function below
-  OCR0A = 0xAF;
-  TIMSK0 |= _BV(OCIE0A); // Enable Output Compare Match A Interrupt
+  cli();//stop interrupts
+
+  // Timer0 is an 8-bit that counts from 0 to 255 and generates an interrupt whenever it overflows. 
+  // It uses a clock divisor of 64 by default to give us an interrupt rate of 976.5625 Hz (close enough to a 1KHz for our purposes).  
+  // We won't mess with the freqency of Timer0, because that would break millis()!   
+
+  // set timer0 interrupt at 1kHz
+  //TCCR0A = 0;// set entire TCCR0A register to 0
+  //TCCR0B = 0;// same for TCCR0B
+  //TCNT0  = 0;//initialize counter value to 0
+  // set compare match register for 1khz increments
+  //OCR0A = 249;// = (16*10^6) / (1000*64) - 1 (must be <256)
+  // turn on CTC mode
+  //TCCR0A |= (1 << WGM01);
+  // Set CS01 and CS00 bits for 64 prescaler
+  //TCCR0B |= (1 << CS01) | (1 << CS00);   
+  // enable timer compare interrupt
+  TIMSK0 |= (1 << OCIE0A);
+
+  sei();//allow interrupts
 }
 
 void Button::reset(void) {
@@ -40,7 +56,7 @@ void Button::reset(void) {
   Serial.println("button init");
 }
 
-// button polling routine (every 32.768 ms)
+// button polling routine (every 1 ms)
 void Button::interrupt(void) {
 
   // the flags will be cleared externally

@@ -10,7 +10,7 @@
 #endif //BUTTON_DELAY
 
 #ifndef BUTTON_HELD
-#define BUTTON_HELD   500
+#define BUTTON_HELD   400
 #endif //BUTTON_HELD
 
 typedef enum {
