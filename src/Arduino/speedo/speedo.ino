@@ -103,7 +103,7 @@ void calc_tire(void) {
 }
 
 void set_mode_and_reset_button(mainmode mode) {
-  switch (current_mode) {
+  switch (mode) {
     case MODE_SPD:  // calculate and show current speed until a button is held
       Serial.println("Speed");
       break;
@@ -120,6 +120,21 @@ void set_mode_and_reset_button(mainmode mode) {
       break;
     case MODE_TIRE:   // show menu
       Serial.println(MSG_TIRES);
+      break;
+    case MODE_WIDTH:   // show menu
+      Serial.println(MSG_WIDTH);
+      break;
+    case MODE_WALL:   // show menu
+      Serial.println(MSG_WALL);
+      break;
+    case MODE_WHEEL:   // show menu
+      Serial.println(MSG_WHEEL);
+      break;
+    case MODE_FIX:   // show menu
+      Serial.println(MSG_FIX);
+      break;
+    case MODE_NEXT:   // show menu
+      Serial.println(MSG_NEXT);
     
   }
   current_mode = mode;
@@ -146,24 +161,25 @@ void loop() {
     }
   }
 
+  lpg = fuel.flag_lpg_reed;
+  if (lpg != fuel.flag_lpg_mode) {
+    if (lpg) {
+      set_mode_and_reset_button(MODE_LPG);
+    } else {
+      set_mode_and_reset_button(MODE_UNL);
+    }
+    fuel.flag_lpg_mode = lpg;
+  }
+
   switch (current_mode) {
 
     case MODE_SPD:  // calculate and show current speed until a button is held
 //      Serial.println("Speed");
-        speed.calculate();
-        hodo.write_distance();
-        bigDisplay.speed(speed.speed);
-        smallDisplay.trip(hodo.trip);
-        //display.distance(hodo.distance);
-        lpg = fuel.flag_lpg_reed;
-        if (lpg != fuel.flag_lpg_mode) {
-          if (lpg) {
-            set_mode_and_reset_button(MODE_LPG);
-          } else {
-            set_mode_and_reset_button(MODE_UNL);
-          }
-          fuel.flag_lpg_mode = lpg;
-        }
+      speed.calculate();
+      hodo.write_distance();
+      bigDisplay.speed(speed.speed);
+      smallDisplay.trip(hodo.trip);
+      //display.distance(hodo.distance);
       if (button.status == BUTTON_STATUS_PRESSED) {
         set_mode_and_reset_button(MODE_MENU_CLR);
       }
@@ -184,6 +200,8 @@ void loop() {
         //write_distance();
         //display_trip(trip);
         //display_distance(distance);
+        case BUTTON_STATUS_PRESSED:
+        case BUTTON_STATUS_HELD:
         case BUTTON_STATUS_TIMEOUT:
           set_mode_and_reset_button(MODE_DEFAULT);
           break;
@@ -234,8 +252,8 @@ void loop() {
       current = read_tire(EEPROM_WIDTH, WIDTH_DEFAULT, WIDTH_STEP, WIDTH_MIN);
       bigDisplay.mode(MSG_WIDTH);
       smallDisplay.num(current);
-      Serial.print(current);
-      Serial.println(MSG_WIDTH);
+//      Serial.print(current);
+//      Serial.println(MSG_WIDTH);
       switch (button.status) {
         case BUTTON_STATUS_PRESSED:
           set_mode_and_reset_button(MODE_WALL);
@@ -257,8 +275,8 @@ void loop() {
       current = read_tire(EEPROM_WALL, WALL_DEFAULT, WALL_STEP, WALL_MIN);
       bigDisplay.mode(MSG_WALL);
       smallDisplay.num(current);
-      Serial.print(current);
-      Serial.println(MSG_WALL);
+      //Serial.print(current);
+      //Serial.println(MSG_WALL);
       switch (button.status) {
         case BUTTON_STATUS_PRESSED:
           set_mode_and_reset_button(MODE_WHEEL);
@@ -280,8 +298,8 @@ void loop() {
       current = read_tire(EEPROM_WHEEL, WHEEL_DEFAULT, WHEEL_STEP, WHEEL_MIN);
       bigDisplay.mode(MSG_WHEEL);
       smallDisplay.num(current);
-      Serial.print(current);
-      Serial.println(MSG_WHEEL);
+      //Serial.print(current);
+      //Serial.println(MSG_WHEEL);
       switch (button.status) {
         case BUTTON_STATUS_PRESSED:
           set_mode_and_reset_button(MODE_FIX);
@@ -303,8 +321,8 @@ void loop() {
       current = read_tire(EEPROM_FIX, FIX_DEFAULT, FIX_STEP, FIX_MIN);
       bigDisplay.mode(MSG_FIX);
       smallDisplay.num(current);
-      Serial.print(current);
-      Serial.println(MSG_FIX);
+      //Serial.print(current);
+      //Serial.println(MSG_FIX);
       switch (button.status) {
         case BUTTON_STATUS_PRESSED:
           set_mode_and_reset_button(MODE_DEFAULT);    // let's wrap around.
@@ -325,8 +343,8 @@ void loop() {
     case MODE_NEXT:   // show menu
       bigDisplay.mode(MSG_NEXT);
       smallDisplay.num(current);
-      Serial.print(current);
-      Serial.println(MSG_NEXT);
+      //Serial.print(current);
+      //Serial.println(MSG_NEXT);
       switch (button.status) {
         case BUTTON_STATUS_PRESSED:
           current += step;
