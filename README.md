@@ -30,8 +30,31 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ## Release
 
-  * 
+  * button
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0030.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0031.JPG)
 
+  * beds for displays
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0033.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0034.JPG)
+
+  * frame for displays
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0035.JPG)
+
+
+  * displays
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0036.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0037.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0032.JPG)
+
+
+  * complete & working
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0040.JPG)
 
 ## References
 
