@@ -1,18 +1,6 @@
 #ifndef button_h
 #define button_h
 
-#ifndef BUTTON_PIN
-#define BUTTON_PIN    4
-#endif //BUTTON_PIN
-
-#ifndef BUTTON_DELAY
-#define BUTTON_DELAY  5000
-#endif //BUTTON_DELAY
-
-#ifndef BUTTON_HELD
-#define BUTTON_HELD   400
-#endif //BUTTON_HELD
-
 typedef enum {
   BUTTON_STATUS_NONE,
   BUTTON_STATUS_PRESSED,
@@ -21,9 +9,9 @@ typedef enum {
 } button_status;
 
 class Button {
-    unsigned int held_count; // how many tmr0 ticks the button has been held
-    unsigned int rlsd_count; // how many tmr0 ticks the button has been released
-    
+    uint16_t held_count; // how many tmr0 ticks the button has been held
+    uint16_t rlsd_count; // how many tmr0 ticks the button has been released 
+
   public:
 #ifdef VOLATILE
     volatile 

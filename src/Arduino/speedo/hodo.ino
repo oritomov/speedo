@@ -16,9 +16,7 @@ This program is free software: you can redistribute it and/or modify
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "hodo.h"
-#include "eeprom.h"
-
+#ifdef hodo_h
 // init
 void Hodo::init() {
   flag_distance.lo = false; 
@@ -33,7 +31,7 @@ void Hodo::init() {
 
   distance_pulses = 0;
 
-  read_trip(fuel.flag_lpg_mode);
+  read_trip(false);
 }
 
 // reset the trip
@@ -41,7 +39,11 @@ void Hodo::reset(void) {
   //Serial.println("Hodo::reset");
   trip = 0;
   trip_pulses = 0;
-  eeprom_trip(trip, fuel.flag_lpg_mode);
+#ifdef fuel_h
+  eeprom_trip(trip, flag_lpg_mode);
+#else //fuel_h
+  eeprom_trip(trip, false);
+#endif //fuel_h
   flag_trip = false;
   flag_trip_half = false;
 }
@@ -89,7 +91,11 @@ void Hodo::incr_distance(void) {
 void Hodo::write_distance(void) {
   // stores distance when it is xxxx.5
   if ((trip_pulses >= (pulses_in_100m / 2)) && !flag_trip_half) {
-    eeprom_trip(trip + 1, fuel.flag_lpg_mode);
+#ifdef fuel_h
+    eeprom_trip(trip + 1, flag_lpg_mode);
+#else //fuel_h
+    eeprom_trip(trip + 1, false);
+#endif //fuel_h
     // stored. don't store anymore
     flag_trip_half = true;
   }
@@ -102,4 +108,4 @@ void Hodo::write_distance(void) {
   // stores distance when it is xxxx.5
   eeprom_distance(distance, distance_pulses == 5, &flag_distance);
 }
-
+#endif
