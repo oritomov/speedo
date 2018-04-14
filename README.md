@@ -6,6 +6,7 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ## Details
 
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/7.jpg)
 ![](https://github.com/oritomov/speedo/blob/master/git/uaf2115.png)
 
 ### Circuit
