@@ -6,7 +6,7 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ## Details
 
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/7.jpg)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/uaf2115.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/uaf2115.png)
 
 ### Circuit
@@ -31,31 +31,46 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ## Release
 
+  * prototype
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto1.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto2.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto3.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto4.JPG)
+
+  * pcb
+  
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb_top.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb_bottom.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb1.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb2.JPG)
+
   * button
   
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0030.JPG)
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0031.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/button1.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/button2.JPG)
 
   * beds for displays
   
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0033.JPG)
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0034.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_beds.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_in_beds.JPG)
 
   * frame for displays
   
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0035.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_frame.JPG)
 
 
   * displays
   
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0036.JPG)
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0037.JPG)
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0032.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_framed.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_mounted.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/l_cable.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_test.JPG)
 
 
   * complete & working
   
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/DSC_0040.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/ready_and_working.JPG)
 
 ## References
 
