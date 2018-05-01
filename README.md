@@ -15,13 +15,15 @@ That is why I decided to build it digital.
 
 10 years before! Or something :)
 
+There are two mileages for the different fuels - one for LPG and one for unleaded. It shows the current one.
+
+I use the reset odometer button for mode selector. Short push is change of mode, and held of button for confirm. For example: push changes mode to "Reset mileage?" mode. If it follows push - then mode changes to "Set tires?" or if the button is held - reset indeed has happen. 
+
 ## Details
 
 Initially I thought to gather all the electronics based on a PIC and 7 segments LEDs at the opposite side of the UAF2115 into the speedometer. But I never release it at that manner.
 
 Recently I decided to build it by Arduino and OLED displays. But then I never find a way to gather all electronics into speedometer. And finally I made it with the main board outside.
-
-I use the reset odometer button for mode selector. Short push is change of mode, and held of button for confirm. For example: push changes mode to "Reset mileage?" mode. If it follows push - then mode changes to "Set tires?" or if the button is held - reset indeed has happen. 
 
 ### Circuit
 
@@ -46,44 +48,60 @@ I use the reset odometer button for mode selector. Short push is change of mode,
 ## Release
 
   * prototype
-  
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto1.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto2.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto3.JPG)
+
+
+ * inside board. it sits at the opposite side of the UAF2115. There is a housing for the cable to the main board, a pin for LPG,  other pins for the displays, the button and also power, ground and speed signal from the UAF2115
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/proto4.JPG)
 
-  * pcb
-  
+
+  * the main pcb
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb_top.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb_bottom.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb1.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/pcb2.JPG)
 
-  * button
-  
+
+  * button. I glued some plastic blocks to screw the button 
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/button1.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/button2.JPG)
 
-  * beds for displays
-  
+
+  * beds for displays. I dig couple mm into front plate where displays should lays
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_beds.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_in_beds.JPG)
 
-  * frame for displays
-  
+
+  * frame for displays. And glue some extra ribs to support displays at the back.
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_frame.JPG)
 
 
-  * displays
-  
+  * At this manner displays are fixed in place, but I can change them in case.
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_framed.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_mounted.JPG)
+
+
+  * In order display connectors to not touch anything inside speed point mechanism, I made them L shaped
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/l_cable.JPG)
+
+
+  * almost assembled
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_test.JPG)
 
 
-  * complete & working
-  
+  * and everything is complete & working
+
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/ready_and_working.JPG)
 
 ## References
