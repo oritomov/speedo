@@ -4,7 +4,7 @@ version: 1.359
 file_version: 1.344
 project_name: "speedo1D"
 full_library_folder: "c:\program files\freepcb\lib"
-CAM_folder: "H:\projects\speedo\git\CAM"
+CAM_folder: "H:\projects\speedo\git\arduino\CAM"
 ses_file_path: ""
 netlist_file_path: ""
 SMT_connect_copper: "0"
@@ -69,10 +69,10 @@ routing_grid_spacing: 635000.000000
   routing_grid_item: 3.33326772MIL
   routing_grid_item: 4MIL
   routing_grid_item: 5MIL
-  routing_grid_item: 6.66559055MIL
+  routing_grid_item: 6.66555118MIL
   routing_grid_item: 10MIL
   routing_grid_item: 12.5MIL
-  routing_grid_item: 16.66559055MIL
+  routing_grid_item: 16.66555118MIL
   routing_grid_item: 20MIL
   routing_grid_item: 25MIL
   routing_grid_item: 40MIL
@@ -226,27 +226,32 @@ author: "Ori"
       inner_pad: 0 0 0 0 0 0
       bottom_pad: 1 55 37 37 0
 
-name: "C02"
-author: "ori"
+name: "RAD-248"
+author: "Ivex"
+source: "DIGI-KEY CATALOG NO. 941 PAGE 161"
   units: MIL
-  sel_rect: -37.5 -45 137.5 45
-  ref_text: 50 -20 50 0 7
-  value_text: 50 -20 -50 0 7
-  centroid: 0 50 0 0
-  outline_polyline: 10 40 30
-    next_corner: 40 -30 0
-    next_corner: 60 -30 0
-    next_corner: 60 30 0
-    close_polyline: 0
+  sel_rect: -83 -132 181 132
+  ref_text: 50 49 159 0 7
+  value_text: 50 49 59 0 7
+  centroid: 0 49 0 0
+  outline_polyline: 7 -15 -50
+    next_corner: 15 -50 0
+  outline_polyline: 7 0 -35
+    next_corner: 0 -65 0
+  outline_polyline: 7 173 0
+    next_corner: 49 124 2
+    next_corner: -75 0 2
+    next_corner: 49 -124 2
+    close_polyline: 2
   n_pins: 2
-    pin: "1" 28 0 0 0
-      top_pad: 1 55 37 37 0
+    pin: "1" 28 98 0 0
+      top_pad: 1 65 32 32 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 55 37 37 0
-    pin: "2" 28 100 0 0
-      top_pad: 1 55 37 37 0
+      bottom_pad: 1 65 32 32 0
+    pin: "2" 28 0 0 0
+      top_pad: 1 65 32 32 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 55 37 37 0
+      bottom_pad: 1 65 32 32 0
 
 name: "TCA9543A"
 description: "2-Channel I2C Bus Switch"
@@ -332,32 +337,27 @@ description: "2-Channel I2C Bus Switch"
       inner_pad: 0 0 0 0 0 1
       bottom_pad: 2 60 27 27 0 1
 
-name: "RAD-248"
-author: "Ivex"
-source: "DIGI-KEY CATALOG NO. 941 PAGE 161"
+name: "C02"
+author: "ori"
   units: MIL
-  sel_rect: -83 -132 181 132
-  ref_text: 50 49 159 0 7
-  value_text: 50 49 59 0 7
-  centroid: 0 49 0 0
-  outline_polyline: 7 -15 -50
-    next_corner: 15 -50 0
-  outline_polyline: 7 0 -35
-    next_corner: 0 -65 0
-  outline_polyline: 7 173 0
-    next_corner: 49 124 2
-    next_corner: -75 0 2
-    next_corner: 49 -124 2
-    close_polyline: 2
+  sel_rect: -37.5 -45 137.5 45
+  ref_text: 50 -20 50 0 7
+  value_text: 50 -20 -50 0 7
+  centroid: 0 50 0 0
+  outline_polyline: 10 40 30
+    next_corner: 40 -30 0
+    next_corner: 60 -30 0
+    next_corner: 60 30 0
+    close_polyline: 0
   n_pins: 2
-    pin: "1" 28 98 0 0
-      top_pad: 1 65 32 32 0
+    pin: "1" 28 0 0 0
+      top_pad: 1 55 37 37 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 65 32 32 0
-    pin: "2" 28 0 0 0
-      top_pad: 1 65 32 32 0
+      bottom_pad: 1 55 37 37 0
+    pin: "2" 28 100 0 0
+      top_pad: 1 55 37 37 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 65 32 32 0
+      bottom_pad: 1 55 37 37 0
 
 name: "1PIN"
   units: MIL
@@ -389,18 +389,18 @@ source: "DIGIKEY CATALOG NO. 941, PAGE 27"
     next_corner: 250 75 0
     next_corner: 250 50 0
   n_pins: 3
-    pin: "1" 28 0 0 0
-      top_pad: 2 60 30 30 0
+    pin: "1" 36 0 0 0
+      top_pad: 2 70 30 30 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 2 60 30 30 0
-    pin: "2" 28 100 0 0
-      top_pad: 1 60 30 30 0
+      bottom_pad: 2 70 30 30 0
+    pin: "2" 36 100 0 0
+      top_pad: 1 70 30 30 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 60 30 30 0
-    pin: "3" 28 200 0 0
-      top_pad: 1 60 30 30 0
+      bottom_pad: 1 70 30 30 0
+    pin: "3" 36 200 0 0
+      top_pad: 1 70 30 30 0
       inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 60 30 30 0
+      bottom_pad: 1 70 30 30 0
 
 name: "Arduino Nano"
   units: MIL
@@ -579,6 +579,36 @@ source: "DIGIKEY CATALOG NO. 941, PAGE 27"
       inner_pad: 0 0 0 0 0 0
       bottom_pad: 1 60 30 30 0
 
+name: "T"
+  units: MIL
+  sel_rect: -73.5 -137.5 118.5 137.5
+  ref_text: 50 0 160 0 7
+  value_text: 50 0 60 0 7
+  centroid: 0 0 0 0
+  outline_polyline: 7 -60 86
+    next_corner: -60 -86 0
+  outline_polyline: 7 -60 86
+    next_corner: 0 105 0
+  outline_polyline: 7 105 0
+    next_corner: 0 105 2
+  outline_polyline: 7 0 -105
+    next_corner: 105 0 2
+  outline_polyline: 7 0 -105
+    next_corner: -60 -86 0
+  n_pins: 3
+    pin: "1" 28 0 100 0
+      top_pad: 1 55 25 25 0
+      inner_pad: 0 0 0 0 0 0
+      bottom_pad: 1 55 25 25 0
+    pin: "2" 28 0 0 0
+      top_pad: 1 55 25 25 0
+      inner_pad: 0 0 0 0 0 0
+      bottom_pad: 1 55 25 25 0
+    pin: "3" 28 0 -100 0
+      top_pad: 1 55 25 25 0
+      inner_pad: 0 0 0 0 0 0
+      bottom_pad: 1 55 25 25 0
+
 name: "Button"
 author: "Ivex"
   units: MIL
@@ -613,36 +643,6 @@ author: "Ivex"
       top_pad: 1 60 30 30 0
       inner_pad: 0 0 0 0 0 0
       bottom_pad: 1 60 30 30 0
-
-name: "T"
-  units: MIL
-  sel_rect: -73.5 -137.5 118.5 137.5
-  ref_text: 50 0 160 0 7
-  value_text: 50 0 60 0 7
-  centroid: 0 0 0 0
-  outline_polyline: 7 -60 86
-    next_corner: -60 -86 0
-  outline_polyline: 7 -60 86
-    next_corner: 0 105 0
-  outline_polyline: 7 105 0
-    next_corner: 0 105 2
-  outline_polyline: 7 0 -105
-    next_corner: 105 0 2
-  outline_polyline: 7 0 -105
-    next_corner: -60 -86 0
-  n_pins: 3
-    pin: "1" 28 0 100 0
-      top_pad: 1 55 25 25 0
-      inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 55 25 25 0
-    pin: "2" 28 0 0 0
-      top_pad: 1 55 25 25 0
-      inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 55 25 25 0
-    pin: "3" 28 0 -100 0
-      top_pad: 1 55 25 25 0
-      inner_pad: 0 0 0 0 0 0
-      bottom_pad: 1 55 25 25 0
 
 [board]
 
@@ -855,6 +855,14 @@ net: "Vin" 3 2 0 0 0 0 1
     seg: 1 13 508000 0 0
     vtx: 2 33020000 5080000 11 0 0 0 0
 
+net: "Fin" 2 1 0 0 0 0 1
+  pin: 1 r1.2
+  pin: 2 j4.1
+  connect: 1 1 0 1 0
+    vtx: 1 45720000 17780000 11 0 0 0 0
+    seg: 1 13 508000 0 0
+    vtx: 2 43180000 17780000 11 0 0 0 0
+
 net: "SCL" 2 1 0 0 0 0 1
   pin: 1 u1.7
   pin: 2 u2.4
@@ -866,14 +874,6 @@ net: "SCL" 2 1 0 0 0 0 1
     vtx: 3 19685000 27305000 0 0 0 0 0
     seg: 3 13 508000 0 0
     vtx: 4 17780000 25400000 11 0 0 0 0
-
-net: "Fin" 2 1 0 0 0 0 1
-  pin: 1 r1.2
-  pin: 2 j4.1
-  connect: 1 1 0 1 0
-    vtx: 1 45720000 17780000 11 0 0 0 0
-    seg: 1 13 508000 0 0
-    vtx: 2 43180000 17780000 11 0 0 0 0
 
 net: "Hall" 3 2 0 0 0 0 1
   pin: 1 u1.20
@@ -1014,18 +1014,6 @@ net: "Fb" 2 1 0 0 0 0 1
     seg: 1 13 508000 0 0
     vtx: 2 33020000 17780000 11 0 0 0 0
 
-net: "SDA" 2 1 0 0 0 0 1
-  pin: 1 u1.8
-  pin: 2 u2.5
-  connect: 1 1 0 3 0
-    vtx: 1 22860000 33020000 11 0 0 0 0
-    seg: 1 13 508000 0 0
-    vtx: 2 20955000 31115000 0 0 0 0 0
-    seg: 2 13 508000 0 0
-    vtx: 3 20955000 26035000 0 0 0 0 0
-    seg: 3 13 508000 0 0
-    vtx: 4 17780000 22860000 11 0 0 0 0
-
 net: "SD0" 2 1 0 0 0 0 1
   pin: 1 u2.12
   pin: 2 j3.4
@@ -1038,17 +1026,17 @@ net: "SD0" 2 1 0 0 0 0 1
     seg: 3 13 508000 0 0
     vtx: 4 40640000 33020000 11 0 0 0 0
 
-net: "SC0" 2 1 0 0 0 0 1
-  pin: 1 u2.13
-  pin: 2 j3.3
+net: "SDA" 2 1 0 0 0 0 1
+  pin: 1 u1.8
+  pin: 2 u2.5
   connect: 1 1 0 3 0
-    vtx: 1 45720000 27940000 11 0 0 0 0
+    vtx: 1 22860000 33020000 11 0 0 0 0
     seg: 1 13 508000 0 0
-    vtx: 2 44450000 27940000 0 0 0 0 0
+    vtx: 2 20955000 31115000 0 0 0 0 0
     seg: 2 13 508000 0 0
-    vtx: 3 41910000 30480000 0 0 0 0 0
+    vtx: 3 20955000 26035000 0 0 0 0 0
     seg: 3 13 508000 0 0
-    vtx: 4 40640000 30480000 11 0 0 0 0
+    vtx: 4 17780000 22860000 11 0 0 0 0
 
 net: "SD1" 2 1 0 0 0 0 1
   pin: 1 u2.9
@@ -1061,6 +1049,18 @@ net: "SD1" 2 1 0 0 0 0 1
     vtx: 3 41910000 40640000 0 0 0 0 0
     seg: 3 13 508000 0 0
     vtx: 4 40640000 40640000 11 0 0 0 0
+
+net: "SC0" 2 1 0 0 0 0 1
+  pin: 1 u2.13
+  pin: 2 j3.3
+  connect: 1 1 0 3 0
+    vtx: 1 45720000 27940000 11 0 0 0 0
+    seg: 1 13 508000 0 0
+    vtx: 2 44450000 27940000 0 0 0 0 0
+    seg: 2 13 508000 0 0
+    vtx: 3 41910000 30480000 0 0 0 0 0
+    seg: 3 13 508000 0 0
+    vtx: 4 40640000 30480000 11 0 0 0 0
 
 net: "SC1" 2 1 0 0 0 0 1
   pin: 1 u2.10
