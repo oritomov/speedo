@@ -5,9 +5,9 @@
 
 #define I2C_ADDR 0x70
 
-#define BIG_DISPLAY 1
+#define BIG_DISPLAY 2
 #ifndef SINGLE_DISPLAY
-#define SMALL_DISPLAY 2
+#define SMALL_DISPLAY 1
 #endif //SINGLE_DISPLAY
 
 class U8G2_SSD1306_128X_I2C : public U8G2 {
