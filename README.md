@@ -4,26 +4,26 @@ It is implemented especially for Audi B3/B4 with bi-fuel - unleaded and LPG.
 
 ## Introduction
 
-There is a UAF2115 in the spidometer. It uses speedo read (hall) sensor and shows the speed and mileage. 
+This is the original UAF2115 in the spidometer. It uses speedo read (hall) sensor and shows the speed and mileage. 
 
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/uaf2115.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/uaf2115.png)
 
-Shown speed is not accrued and mileage mechanism is made from plastic and after almost 30 years it is useless.
+Shown speed is not accurate and mileage mechanism is made from plastic and after almost 30 years it is useless.
 
-That is why I decided to build it digital.
+That is why I decided to build a digital one.
 
-10 years before! Or something :)
+10 years ago! Or something :)
 
 There are two mileages for the different fuels - one for LPG and one for unleaded. It shows the current one.
 
-I use the reset odometer button for mode selector. Short push is change of mode, and held of button for confirm. For example: push changes mode to "Reset mileage?" mode. If it follows push - then mode changes to "Set tires?" or if the button is held - reset indeed has happen. 
+I use the reset odometer button for mode selector. Short push is changing mode, and helding the button to confirm. For example: one push changes to "Reset mileage?" mode. If the button is held - reset indeed has happened or if it follows second push - then mode changes to "Set tires?" and etc. 
 
 ## Details
 
-Initially I thought to gather all the electronics based on a PIC and 7 segments LEDs at the opposite side of the UAF2115 into the speedometer. But I never release it at that manner.
+Initially I thought to gather all the electronics based on a PIC and 7 segments LEDs at the opposite side of the UAF2115 into the speedometer. But I never released in at that manner.
 
-Recently I decided to build it by Arduino and OLED displays. But then I never find a way to gather all electronics into speedometer. And finally I made it with the main board outside.
+Recently I decided to build it with Arduino and OLED displays. But then I never find a way to gather all electronics into speedometer. And finally I made it with the main circuitboard outside.
 
 ### Circuit
 
@@ -90,7 +90,7 @@ Recently I decided to build it by Arduino and OLED displays. But then I never fi
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_mounted.JPG)
 
 
-  * In order display connectors to not touch anything inside speed point mechanism, I made them L shaped
+  * In order display connectors not to touch anything inside speed point mechanism, I made them L shaped
 
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/l_cable.JPG)
 
