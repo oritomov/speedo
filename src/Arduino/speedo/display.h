@@ -44,7 +44,7 @@ class BigDisplay: public AbstractDisplay {
 
   public:
     BigDisplay(void);
-    void speed(uint16_t speed);
+    void speed(uint8_t speed);
     void mode(String text);
 #ifdef SINGLE_DISPLAY
     void mode(String text, int num);

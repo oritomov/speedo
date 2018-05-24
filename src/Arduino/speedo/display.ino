@@ -78,7 +78,7 @@ BigDisplay::BigDisplay(void): AbstractDisplay(BIG_DISPLAY) {
 }
 
 // translate "speed".  Blank leading zeroes, but if num is zero show 0 in ones digit.
-void BigDisplay::speed(uint16_t speed) {
+void BigDisplay::speed(uint8_t speed) {
   uint8_t x = 4;
   char temp_digit[4];
   uint8_t temp;
@@ -128,17 +128,17 @@ SmallDisplay::SmallDisplay(void): AbstractDisplay(SMALL_DISPLAY) {
 // translate "trip".  Blank not leading zeroes.
 void SmallDisplay::trip(uint16_t trip) {
   char temp_digit[6];
-  uint8_t temp;
+  uint16_t temp;
 
   // normally I'd use a for loop, but 8 bit division is much faster than 16 bit and we need the speed.
   temp_digit[5] = EOS;
-  temp_digit[4] = (trip % 10) + ZERO; // meters
+  temp_digit[4] = lowByte((trip % 10) + ZERO); // meters
   temp_digit[3] = '.';
   temp = trip / 10;
-  temp_digit[2] = temp % 10 + ZERO; // ones
+  temp_digit[2] = lowByte((temp % 10) + ZERO); // ones
   temp = temp / 10;
-  temp_digit[1] = temp % 10 + ZERO;  // tens
-  temp_digit[0] = temp / 10 + ZERO;  // hundreds
+  temp_digit[1] = lowByte((temp % 10) + ZERO);  // tens
+  temp_digit[0] = lowByte((temp / 10) + ZERO);  // hundreds
 
   display(14, 31, u8g2_font_fub30_tf, temp_digit);
 }
