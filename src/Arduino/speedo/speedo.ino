@@ -238,9 +238,11 @@ void loop() {
 #endif //display_h
         //        Serial.println(MSG_LPG);
       }
+#ifdef display_h
 #ifndef SINGLE_DISPLAY
       smallDisplay.trip(hodo.trip);
 #endif //SINGLE_DISPLAY
+#endif //display_h
       switch (button.status) {
         //calculate_speed(0);
         //write_distance();
