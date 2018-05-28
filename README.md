@@ -97,6 +97,9 @@ Recently I decided to build it with Arduino and OLED displays. But then I never 
 
   * almost assembled
 
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/assembly1.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/assembly2.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/assembly3.JPG)
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/display_test.JPG)
 
 
