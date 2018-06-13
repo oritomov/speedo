@@ -106,7 +106,7 @@ Recently I decided to build it with Arduino and OLED displays. But then I never 
   * and everything is complete & working
 
 ![](https://github.com/oritomov/speedo/blob/master/git/arduino/ready_and_working.JPG)
-![](https://github.com/oritomov/speedo/blob/master/git/arduino/140.JPG)
+![](https://github.com/oritomov/speedo/blob/master/git/arduino/140.jpg)
 
 ## References
 
